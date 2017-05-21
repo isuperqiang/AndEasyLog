@@ -34,5 +34,29 @@ public class LoggerFactory {
         }
     }
 
+    /**
+     * 以类名为 tag 获取日志
+     *
+     * @param clazz 类名
+     * @return log
+     */
+    public static ILogger getLogger(Class clazz) {
+        ILogger log;
+        String tag = clazz.getSimpleName();
+        if (!LogUtils.isEmpty(tag)) {
+            if (LogConfig.isLogEnable()) {
+                log = logMaps.get(tag);
+                if (log == null) {
+                    log = new AndroidLogger(tag);
+                    logMaps.put(tag, log);
+                }
+                return log;
+            } else {
+                return sEmptyLogger;
+            }
+        } else {
+            return sEmptyLogger;
+        }
+    }
 
 }

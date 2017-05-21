@@ -22,9 +22,12 @@ public class MainActivity extends AppCompatActivity {
         log.xml("<?xml version=\"1.0\"?><note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>");
         log.info("********************************");
 
-        log.debug("多个参数的例子。String:{}, int:{}, long:{}, boolean:{}, char:{} etc.", "Log", 1, 1000L, false, 'c');
+        log.debug("打印多个参数。String:{}, int:{}, long:{}, boolean:{}, char:{} etc.", "Log", 1, 1000L, false, 'c');
         log.info("********************************");
 
         log.warn(new NullPointerException("NPE"));
+        log.info("********************************");
+
+        log.debug("打印一段消息");
     }
 }
