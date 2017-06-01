@@ -1,6 +1,26 @@
 # AndEasyLog
 一个简洁实用的 Android 日志库
 
+### 添加依赖：
+第一步：在工程根目录 build.gradle 的 allprojects → repositories 下面添加 JitPack 仓库
+
+```
+    allprojects {
+        repositories {
+            ...
+            maven { url 'https://jitpack.io' }
+        }
+    }
+```
+
+第二步：在模块 build.gradle 添加依赖
+
+```
+    dependencies {
+        compile 'com.github.isuperqiang:AndEasyLog:1.0.0'
+    }
+```
+
 ### 特点：
 1. 支持 5 种日志打印级别：verbose、debug、info、warn、error
 2. 支持格式化打印 Json 和 Xml
