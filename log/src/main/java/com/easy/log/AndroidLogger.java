@@ -13,8 +13,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import static com.easy.log.ILogger.LOG_LEVEL.i;
-
 /**
  * Android 日志打印
  */
@@ -42,7 +40,7 @@ class AndroidLogger implements ILogger {
 
     @Override
     public void info(String message, Object... params) {
-        log(i, tag, message, null, params);
+        log(LOG_LEVEL.i, tag, message, null, params);
     }
 
     @Override
@@ -214,7 +212,7 @@ class AndroidLogger implements ILogger {
             v(tag, message, throwable);
         } else if (level == LOG_LEVEL.d) {
             d(tag, message, throwable);
-        } else if (level == i) {
+        } else if (level == LOG_LEVEL.i) {
             i(tag, message, throwable);
         } else if (level == LOG_LEVEL.w) {
             w(tag, message, throwable);
