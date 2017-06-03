@@ -17,11 +17,24 @@ import javax.xml.transform.stream.StreamSource;
  * Android 日志打印
  */
 class AndroidLogger implements ILogger {
+    /* 日志级别 */
+    private static final int VERBOSE = 1;
+    private static final int DEBUG = 2;
+    private static final int INFO = 3;
+    private static final int WARN = 4;
+    private static final int ERROR = 5;
+
+    /* Json字符 缩进距离 */
     private static final int JSON_INDENT = 2;
+    /* 当前日志构建时间 */
     private static final long BEGINNING_TIME = System.nanoTime();
+    /* 参数占位符 */
     private static final String PARAMS_PLACEHOLDER = "{}";
+    /* 错误日志格式 */
     private static final String ERROR_LOG_FORMAT = "Error log format";
+    /* 单次打印最大长度 */
     private static final int MAX_LOG_LENGTH = 4000;
+
     private final String tag;
 
     AndroidLogger(String tag) {
@@ -30,17 +43,17 @@ class AndroidLogger implements ILogger {
 
     @Override
     public final void verbose(String message, Object... params) {
-        log(LOG_LEVEL.v, tag, message, null, params);
+        log(VERBOSE, tag, message, null, params);
     }
 
     @Override
     public void debug(String message, Object... params) {
-        log(LOG_LEVEL.d, tag, message, null, params);
+        log(DEBUG, tag, message, null, params);
     }
 
     @Override
     public void info(String message, Object... params) {
-        log(LOG_LEVEL.i, tag, message, null, params);
+        log(INFO, tag, message, null, params);
     }
 
     @Override
@@ -50,12 +63,12 @@ class AndroidLogger implements ILogger {
 
     @Override
     public void warn(String message, Throwable throwable) {
-        log(LOG_LEVEL.w, tag, message, throwable);
+        log(WARN, tag, message, throwable);
     }
 
     @Override
     public void warn(String message, Object... params) {
-        log(LOG_LEVEL.w, tag, message, null, params);
+        log(WARN, tag, message, null, params);
     }
 
     @Override
@@ -65,12 +78,12 @@ class AndroidLogger implements ILogger {
 
     @Override
     public final void error(String message, Throwable throwable) {
-        log(LOG_LEVEL.e, tag, message, throwable);
+        log(ERROR, tag, message, throwable);
     }
 
     @Override
     public final void error(String message, Object... params) {
-        log(LOG_LEVEL.e, tag, message, null, params);
+        log(ERROR, tag, message, null, params);
     }
 
     @Override
@@ -115,7 +128,7 @@ class AndroidLogger implements ILogger {
         }
     }
 
-    private void log(LOG_LEVEL level, String tag, String message, Throwable throwable, Object... params) {
+    private void log(int level, String tag, String message, Throwable throwable, Object... params) {
         String header = createHeader();
         String body = parseMessage(message, params);
         processLog(level, tag, header, body, throwable);
@@ -183,7 +196,7 @@ class AndroidLogger implements ILogger {
         return 0;
     }
 
-    private void processLog(LOG_LEVEL level, String tag, String head, String body, Throwable throwable) {
+    private void processLog(int level, String tag, String head, String body, Throwable throwable) {
         int length = body.length();
         if (length < MAX_LOG_LENGTH) {
             printAndroidLog(level, tag, head.concat(body), throwable);
@@ -204,19 +217,19 @@ class AndroidLogger implements ILogger {
         }
     }
 
-    private void printAndroidLog(LOG_LEVEL level, String tag, String message, Throwable throwable) {
+    private void printAndroidLog(int level, String tag, String message, Throwable throwable) {
         if (LogUtils.isEmpty(message)) {
             message = "Empty/NULL log message";
         }
-        if (level == LOG_LEVEL.v) {
+        if (level == VERBOSE) {
             v(tag, message, throwable);
-        } else if (level == LOG_LEVEL.d) {
+        } else if (level == DEBUG) {
             d(tag, message, throwable);
-        } else if (level == LOG_LEVEL.i) {
+        } else if (level == INFO) {
             i(tag, message, throwable);
-        } else if (level == LOG_LEVEL.w) {
+        } else if (level == WARN) {
             w(tag, message, throwable);
-        } else if (level == LOG_LEVEL.e) {
+        } else if (level == ERROR) {
             e(tag, message, throwable);
         }
     }

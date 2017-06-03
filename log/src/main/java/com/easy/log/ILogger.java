@@ -88,8 +88,4 @@ public interface ILogger {
      * @param xml Xml 文本
      */
     void xml(String xml);
-
-    enum LOG_LEVEL {
-        v, d, i, w, e
-    }
 }
