@@ -1,4 +1,7 @@
 apply plugin: 'com.android.library'
+//启用 JitPack 插件
+apply plugin: 'com.github.dcendents.android-maven'
+group = 'com.github.isuperqiang'
 
 android {
     compileSdkVersion 23
