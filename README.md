@@ -1,5 +1,5 @@
 # AndEasyLog
-[![](https://jitpack.io/v/isuperqiang/Account.svg)](https://jitpack.io/#isuperqiang/Account)
+[![](https://jitpack.io/v/isuperqiang/AndEasyLog.svg)](https://jitpack.io/#isuperqiang/AndEasyLog)
 
 一个简洁实用的 Android 日志库
 
