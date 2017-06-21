@@ -1,4 +1,6 @@
 # AndEasyLog
+[![](https://jitpack.io/v/isuperqiang/Account.svg)](https://jitpack.io/#isuperqiang/Account)
+
 一个简洁实用的 Android 日志库
 
 ### 添加依赖：
