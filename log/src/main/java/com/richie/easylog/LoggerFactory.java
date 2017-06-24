@@ -1,4 +1,4 @@
-package com.easy.log;
+package com.richie.easylog;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

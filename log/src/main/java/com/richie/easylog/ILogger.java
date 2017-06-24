@@ -1,4 +1,4 @@
-package com.easy.log;
+package com.richie.easylog;
 
 /**
  * 日志接口

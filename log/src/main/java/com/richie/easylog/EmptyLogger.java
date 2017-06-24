@@ -1,4 +1,4 @@
-package com.easy.log;
+package com.richie.easylog;
 
 /**
  * ILogger 空实现

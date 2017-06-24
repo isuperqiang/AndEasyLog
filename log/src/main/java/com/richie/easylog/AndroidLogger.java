@@ -1,4 +1,4 @@
-package com.easy.log;
+package com.richie.easylog;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

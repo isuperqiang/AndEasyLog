@@ -1,8 +1,7 @@
-package com.easy.log;
+package com.richie.easylog;
 
 /**
- * @author Richie on 2017.05.20
- *         日志配置
+ * 日志配置
  */
 public class LogConfig {
     /**
@@ -10,7 +9,7 @@ public class LogConfig {
      */
     private static boolean logEnable = true;
 
-    public static boolean isLogEnable() {
+    static boolean isLogEnable() {
         return logEnable;
     }
 

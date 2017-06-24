@@ -2,7 +2,7 @@ package com.easy.log.test;
 
 import android.app.Application;
 
-import com.easy.log.LogConfig;
+import com.richie.easylog.LogConfig;
 
 /**
  * @author Richie on 2017.05.21
