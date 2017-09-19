@@ -24,14 +24,14 @@ class AndroidLogger implements ILogger {
     private static final int WARN = 4;
     private static final int ERROR = 5;
 
-    /* Json字符 缩进距离 */
+    /* Json 字符 缩进距离 */
     private static final int JSON_INDENT = 2;
     /* 当前日志构建时间 */
     private static final long BEGINNING_TIME = System.nanoTime();
     /* 参数占位符 */
     private static final String PARAMS_PLACEHOLDER = "{}";
     /* 错误日志格式 */
-    private static final String ERROR_LOG_FORMAT = "Error log format";
+    private static final String ERROR_LOG_FORMAT = "Log format error";
     /* 单次打印最大长度 */
     private static final int MAX_LOG_LENGTH = 4000;
 
@@ -42,7 +42,7 @@ class AndroidLogger implements ILogger {
     }
 
     @Override
-    public final void verbose(String message, Object... params) {
+    public void verbose(String message, Object... params) {
         log(VERBOSE, tag, message, null, params);
     }
 
@@ -72,17 +72,17 @@ class AndroidLogger implements ILogger {
     }
 
     @Override
-    public final void error(Throwable throwable) {
+    public void error(Throwable throwable) {
         error(null, throwable);
     }
 
     @Override
-    public final void error(String message, Throwable throwable) {
+    public void error(String message, Throwable throwable) {
         log(ERROR, tag, message, throwable);
     }
 
     @Override
-    public final void error(String message, Object... params) {
+    public void error(String message, Object... params) {
         log(ERROR, tag, message, null, params);
     }
 
@@ -94,18 +94,24 @@ class AndroidLogger implements ILogger {
         }
         try {
             json = json.trim();
-            String message = "";
+            StringBuilder message = new StringBuilder();
             if (json.startsWith("{")) {
                 JSONObject jsonObject = new JSONObject(json);
-                message = "JsonObject length:".concat(String.valueOf(jsonObject.length())).concat("\n").concat(jsonObject.toString(JSON_INDENT));
+                message.append("JsonObject length:")
+                        .append(jsonObject.length())
+                        .append("\n")
+                        .append(jsonObject.toString(JSON_INDENT));
             }
             if (json.startsWith("[")) {
                 JSONArray jsonArray = new JSONArray(json);
-                message = "JsonArray length:".concat(String.valueOf(jsonArray.length())).concat("\n").concat(jsonArray.toString(JSON_INDENT));
+                message.append("JsonArray length:")
+                        .append(jsonArray.length())
+                        .append("\n")
+                        .append(jsonArray.toString(JSON_INDENT));
             }
-            debug(message);
+            debug(message.toString());
         } catch (Throwable e) {
-            warn("Invalid Json", e);
+            warn("Invalid json", e);
         }
     }
 
@@ -146,7 +152,7 @@ class AndroidLogger implements ILogger {
         return header.toString();
     }
 
-    private String parseMessage(final String message, final Object[] params) {
+    private String parseMessage(String message, Object[] params) {
         StringBuilder body = new StringBuilder();
         if (message == null) {
             if (params.length != 0) {
@@ -178,13 +184,13 @@ class AndroidLogger implements ILogger {
     private int getLineNumber() {
         try {
             StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-            boolean find = false;
+            boolean isFound = false;
             for (StackTraceElement stackTraceElement : stackTrace) {
                 if (stackTraceElement.getClassName().equals(AndroidLogger.class.getName())) {
-                    find = true;
+                    isFound = true;
                     continue;
                 }
-                if (find) {
+                if (isFound) {
                     if (!stackTraceElement.getClassName().equals(AndroidLogger.class.getName())) {
                         return stackTraceElement.getLineNumber();
                     }
@@ -221,16 +227,24 @@ class AndroidLogger implements ILogger {
         if (LogUtils.isEmpty(message)) {
             message = "Empty/NULL log message";
         }
-        if (level == VERBOSE) {
-            v(tag, message, throwable);
-        } else if (level == DEBUG) {
-            d(tag, message, throwable);
-        } else if (level == INFO) {
-            i(tag, message, throwable);
-        } else if (level == WARN) {
-            w(tag, message, throwable);
-        } else if (level == ERROR) {
-            e(tag, message, throwable);
+        switch (level) {
+            case VERBOSE:
+                v(tag, message, throwable);
+                break;
+            case DEBUG:
+                d(tag, message, throwable);
+                break;
+            case INFO:
+                i(tag, message, throwable);
+                break;
+            case WARN:
+                w(tag, message, throwable);
+                break;
+            case ERROR:
+                e(tag, message, throwable);
+                break;
+            default:
+                break;
         }
     }
 

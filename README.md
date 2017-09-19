@@ -19,7 +19,7 @@
 
 ```
     dependencies {
-        compile 'com.github.isuperqiang:AndEasyLog:1.0.2'
+        compile 'com.github.isuperqiang:AndEasyLog:1.1.0'
     }
 ```
 
@@ -31,49 +31,47 @@
 5. 支持打印无限长的日志，没有 4k 字符的限制
 
 ### 使用：
-全局日志开关配置，建议在 Application 设置：
+1. **开关配置**：
 
-`LogConfig.setLogEnable(true);`
+> 修改 `LoggerFactory` 类的 `LOG_ENABLED` 常量，即可配置全局的日志是否打印。
 
-在每个类里初始化：
+2. **初始化**：
 
-`private final ILogger log = LoggerFactory.getLogger("MainActivity");`
+> 在每个类里面实例化 ILogger。
 
-or
+`private final ILogger logger = LoggerFactory.getLogger("MainActivity");`
 
-`private final ILogger log = LoggerFactory.getLogger(MainActivity.class);`
+或者
+
+`private final ILogger logger = LoggerFactory.getLogger(MainActivity.class);`
+
+3. **打印日志**：
+
+* `logger.debug("打印一段消息");`
+  <img src="images/log-debug.png"  align="left"/>
+* `logger.debug("打印多个参数。String:{}, int:{}, long:{}, boolean:{}, char:{} etc.", "AndroidLog", 100, 1000L, false, 'c');`
+  <img src='images/log-params.png'/>
 
 
-打印日志：
-
-
-
-`log.debug("打印一段消息");`
-```
-[Time:92][ThreadId:1][Line:30] 打印一段消息
-```
-
-`log.debug("打印多个参数。String:{}, int:{}, long:{}, boolean:{}, char:{} etc.", "AndroidLog", 100, 1000L, false, 'c');`
-
-```
-[Time:97][ThreadId:1][Line:25] 打印多个参数。String:AndroidLog, int:100, long:1000, boolean:false, char:c etc.
-```
-
-`log.json("{\"上海\":[\"浦东\"],\"四川\":[\"成都\",\"攀枝花\"],\"福建\":[\"福州\",\"厦门\",\"泉州\"]}");`
+* `logger.json("{\"上海\":[\"浦东\"],\"四川\":[\"成都\",\"攀枝花\"],\"福建\":[\"福州\",\"厦门\",\"泉州\"]}");`
 
 <img src='images/log-json.png'/>
 
-`log.xml("<?xml version=\"1.0\"?><note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>");`
+* `logger.xml("<?xml version=\"1.0\"?><note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>");`
 
 <img src='images/log-xml.png'/>
 
-`log.warn(new NullPointerException("NPE"));`
+* `logger.warn(new NullPointerException("NPE"));`
 
 <img src='images/log-warn.png'/>
 
-消息说明：
+4. **消息说明**：
 
-Time: 从日志创建起的时间值; ThreadId: 线程 ID; Line: 行号
+>  Time: 从日志创建起的时间值；ThreadId: 线程 ID；Line: 行号。
+
+5. **混淆规则**：
+
+>  没有限制，随便混淆。
 
 ## 关于我
 * [微博](http://weibo.com/u/3013545097)

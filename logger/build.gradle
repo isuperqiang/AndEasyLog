@@ -4,21 +4,17 @@ apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.isuperqiang'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion '23.0.3'
+    compileSdkVersion 24
+    buildToolsVersion '24.0.3'
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 23
-        versionCode 102
-        versionName '1.0.2'
+        minSdkVersion 16
+        targetSdkVersion 24
+        versionCode 110
+        versionName '1.1.0'
     }
 
     buildTypes {
-        debug {
-            minifyEnabled false
-        }
-
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
