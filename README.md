@@ -49,23 +49,23 @@
 
 * `logger.debug("打印一段消息");`
 
-  <img src="images/log-debug.png"  align="left"/>
+  <img src='images/log-debug.png'/>
 
 * `logger.debug("打印多个参数。String:{}, int:{}, long:{}, boolean:{}, char:{} etc.", "AndroidLog", 100, 1000L, false, 'c');`
 
   <img src='images/log-params.png'/>
 
 * `logger.json("{\"上海\":[\"浦东\"],\"四川\":[\"成都\",\"攀枝花\"],\"福建\":[\"福州\",\"厦门\",\"泉州\"]}");`
-
-<img src='images/log-json.png'/>
+  
+  <img src='images/log-json.png'/>
 
 * `logger.xml("<?xml version=\"1.0\"?><note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>");`
-
-<img src='images/log-xml.png'/>
+  
+  <img src='images/log-xml.png'/>
 
 * `logger.warn(new NullPointerException("NPE"));`
-
-<img src='images/log-warn.png'/>
+  
+  <img src='images/log-warn.png'/>
 
 4. **消息说明**：
 
