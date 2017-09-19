@@ -33,7 +33,14 @@
 ### 使用：
 1. **开关配置**：
 
-> 修改 `LoggerFactory` 类的 `LOG_ENABLED` 常量，即可配置全局的日志是否打印。
+> 在程序入口的静态代码块中，配置全局日志的开关。
+
+```java
+    /* 关闭日志打印，默认开启 */
+    static {
+         LoggerFactory.setLogEnabled(false);
+    }
+```
 
 2. **初始化**：
 
@@ -56,15 +63,15 @@
   <img src='images/log-params.png'/>
 
 * `logger.json("{\"上海\":[\"浦东\"],\"四川\":[\"成都\",\"攀枝花\"],\"福建\":[\"福州\",\"厦门\",\"泉州\"]}");`
-  
+
   <img src='images/log-json.png'/>
 
 * `logger.xml("<?xml version=\"1.0\"?><note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>");`
-  
+
   <img src='images/log-xml.png'/>
 
 * `logger.warn(new NullPointerException("NPE"));`
-  
+
   <img src='images/log-warn.png'/>
 
 4. **消息说明**：

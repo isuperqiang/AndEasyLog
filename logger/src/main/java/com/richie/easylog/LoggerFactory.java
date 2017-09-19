@@ -8,7 +8,7 @@ public class LoggerFactory {
     /**
      * 日志开关
      */
-    private static final boolean LOG_ENABLED = true;
+    private static boolean sLogEnabled = true;
 
     /**
      * 根据 tag 获取日志
@@ -35,6 +35,10 @@ public class LoggerFactory {
     }
 
     public static boolean isLogEnabled() {
-        return LOG_ENABLED;
+        return sLogEnabled;
+    }
+
+    public static void setLogEnabled(boolean logEnabled) {
+        sLogEnabled = logEnabled;
     }
 }
