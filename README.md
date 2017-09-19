@@ -48,10 +48,12 @@
 3. **打印日志**：
 
 * `logger.debug("打印一段消息");`
-  <img src="images/log-debug.png"  align="left"/>
-* `logger.debug("打印多个参数。String:{}, int:{}, long:{}, boolean:{}, char:{} etc.", "AndroidLog", 100, 1000L, false, 'c');`
-  <img src='images/log-params.png'/>
 
+  <img src="images/log-debug.png"  align="left"/>
+
+* `logger.debug("打印多个参数。String:{}, int:{}, long:{}, boolean:{}, char:{} etc.", "AndroidLog", 100, 1000L, false, 'c');`
+
+  <img src='images/log-params.png'/>
 
 * `logger.json("{\"上海\":[\"浦东\"],\"四川\":[\"成都\",\"攀枝花\"],\"福建\":[\"福州\",\"厦门\",\"泉州\"]}");`
 
