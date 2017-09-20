@@ -4,7 +4,7 @@ package com.richie.easylog;
  * 日志工厂
  */
 public class LoggerFactory {
-    private static final ILogger sEmptyLogger = new EmptyLogger();
+    private static ILogger sEmptyLogger;
     /**
      * 日志开关
      */
@@ -20,6 +20,9 @@ public class LoggerFactory {
         if (isLogEnabled() && !LogUtils.isEmpty(tag)) {
             return new AndroidLogger(tag);
         } else {
+            if (sEmptyLogger == null) {
+                sEmptyLogger = new EmptyLogger();
+            }
             return sEmptyLogger;
         }
     }
