@@ -1,10 +1,13 @@
 package com.richie.easylog;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * 日志工厂
  */
 public class LoggerFactory {
     private static ILogger sEmptyLogger;
+    private static ConcurrentHashMap<String, ILogger> sLoggerMap;
     /**
      * 日志开关
      */
@@ -18,7 +21,15 @@ public class LoggerFactory {
      */
     public static ILogger getLogger(String tag) {
         if (isLogEnabled() && !LogUtils.isEmpty(tag)) {
-            return new AndroidLogger(tag);
+            if (sLoggerMap == null) {
+                sLoggerMap = new ConcurrentHashMap<>();
+            }
+            ILogger logger = sLoggerMap.get(tag);
+            if (logger == null) {
+                logger = new AndroidLogger(tag);
+                sLoggerMap.put(tag, logger);
+            }
+            return logger;
         } else {
             if (sEmptyLogger == null) {
                 sEmptyLogger = new EmptyLogger();

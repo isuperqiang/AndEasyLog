@@ -35,6 +35,8 @@ class AndroidLogger implements ILogger {
     /* 单次打印最大长度 */
     private static final int MAX_LOG_LENGTH = 4000;
 
+    private static final int TIME_COVERT_UNIT = 1000000;
+
     private final String tag;
 
     AndroidLogger(String tag) {
@@ -141,7 +143,7 @@ class AndroidLogger implements ILogger {
     }
 
     private String createHeader() {
-        long usedTime = (System.nanoTime() - BEGINNING_TIME) / 1000000;
+        long usedTime = (System.nanoTime() - BEGINNING_TIME) / TIME_COVERT_UNIT;
         StringBuilder header = new StringBuilder("[Time:");
         header.append(usedTime);
         header.append("][ThreadId:");
