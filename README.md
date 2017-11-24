@@ -19,7 +19,7 @@
 
 ```
     dependencies {
-        compile 'com.github.isuperqiang:AndEasyLog:1.1.1'
+        compile 'com.github.isuperqiang:AndEasyLog:1.1.2'
     }
 ```
 
