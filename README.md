@@ -19,7 +19,7 @@
 
 ```
     dependencies {
-        compile 'com.github.isuperqiang:AndEasyLog:1.1.2'
+        compile 'com.github.isuperqiang:AndEasyLog:1.2.0'
     }
 ```
 
@@ -76,14 +76,14 @@
 
 4. **消息说明**：
 
->  Time: 从日志创建起的时间值；ThreadId: 线程 ID；Line: 行号。
+>  time: 从日志创建起经过的毫秒时间值；tid: 线程 ID；line: 行号。
 
 5. **混淆规则**：
 
 >  没有限制，随便混淆。
 
 ## 关于我
-* [微博](http://weibo.com/u/3013545097)
+* [博客](https://isuperqiang.github.io)
 * [简书](http://www.jianshu.com/u/d5f18207fa2e)
 
 ## 许可

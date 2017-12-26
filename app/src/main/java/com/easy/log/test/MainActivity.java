@@ -6,6 +6,10 @@ import android.os.Bundle;
 import com.richie.easylog.ILogger;
 import com.richie.easylog.LoggerFactory;
 
+/**
+ * @author richie
+ *         测试
+ */
 public class MainActivity extends Activity {
     private final ILogger logger = LoggerFactory.getLogger(MainActivity.class);
 

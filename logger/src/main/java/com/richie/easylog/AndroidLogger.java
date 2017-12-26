@@ -14,15 +14,10 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 /**
- * Android 日志打印
+ * @author richie
+ *         Android 日志打印
  */
 class AndroidLogger implements ILogger {
-    /* 日志级别 */
-    private static final int VERBOSE = 1;
-    private static final int DEBUG = 2;
-    private static final int INFO = 3;
-    private static final int WARN = 4;
-    private static final int ERROR = 5;
 
     /* Json 字符 缩进距离 */
     private static final int JSON_INDENT = 2;
@@ -34,8 +29,8 @@ class AndroidLogger implements ILogger {
     private static final String ERROR_LOG_FORMAT = "Log format error";
     /* 单次打印最大长度 */
     private static final int MAX_LOG_LENGTH = 4000;
-
-    private static final int TIME_COVERT_UNIT = 1000000;
+    /* 纳秒转换成毫秒的倍数 */
+    private static final int TIME_CONVERT_UNIT = 1000000;
 
     private final String tag;
 
@@ -45,17 +40,17 @@ class AndroidLogger implements ILogger {
 
     @Override
     public void verbose(String message, Object... params) {
-        log(VERBOSE, tag, message, null, params);
+        log(android.util.Log.VERBOSE, tag, message, null, params);
     }
 
     @Override
     public void debug(String message, Object... params) {
-        log(DEBUG, tag, message, null, params);
+        log(android.util.Log.DEBUG, tag, message, null, params);
     }
 
     @Override
     public void info(String message, Object... params) {
-        log(INFO, tag, message, null, params);
+        log(android.util.Log.INFO, tag, message, null, params);
     }
 
     @Override
@@ -65,12 +60,12 @@ class AndroidLogger implements ILogger {
 
     @Override
     public void warn(String message, Throwable throwable) {
-        log(WARN, tag, message, throwable);
+        log(android.util.Log.WARN, tag, message, throwable);
     }
 
     @Override
     public void warn(String message, Object... params) {
-        log(WARN, tag, message, null, params);
+        log(android.util.Log.WARN, tag, message, null, params);
     }
 
     @Override
@@ -80,12 +75,12 @@ class AndroidLogger implements ILogger {
 
     @Override
     public void error(String message, Throwable throwable) {
-        log(ERROR, tag, message, throwable);
+        log(android.util.Log.ERROR, tag, message, throwable);
     }
 
     @Override
     public void error(String message, Object... params) {
-        log(ERROR, tag, message, null, params);
+        log(android.util.Log.ERROR, tag, message, null, params);
     }
 
     @Override
@@ -130,7 +125,7 @@ class AndroidLogger implements ILogger {
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
             transformer.transform(xmlInput, xmlOutput);
-            debug("Show xml:\n".concat(xmlOutput.getWriter().toString().replaceFirst(">", ">\n")));
+            debug("XML:\n".concat(xmlOutput.getWriter().toString().replaceFirst(">", ">\n")));
         } catch (Throwable e) {
             warn("Invalid xml", e);
         }
@@ -143,12 +138,12 @@ class AndroidLogger implements ILogger {
     }
 
     private String createHeader() {
-        long usedTime = (System.nanoTime() - BEGINNING_TIME) / TIME_COVERT_UNIT;
-        StringBuilder header = new StringBuilder("[Time:");
+        long usedTime = (System.nanoTime() - BEGINNING_TIME) / TIME_CONVERT_UNIT;
+        StringBuilder header = new StringBuilder("[time:");
         header.append(usedTime);
-        header.append("][ThreadId:");
+        header.append("][tid:");
         header.append(Thread.currentThread().getId());
-        header.append("][Line:");
+        header.append("][line:");
         header.append(getLineNumber());
         header.append("] ");
         return header.toString();
@@ -207,7 +202,7 @@ class AndroidLogger implements ILogger {
     private void processLog(int level, String tag, String head, String body, Throwable throwable) {
         int length = body.length();
         if (length < MAX_LOG_LENGTH) {
-            printAndroidLog(level, tag, head.concat(body), throwable);
+            printAndroidLog(level, tag, head + body, throwable);
         } else {
             int index = 0;
             int count = 0;
@@ -220,7 +215,8 @@ class AndroidLogger implements ILogger {
                     subBody = body.substring(index, index + MAX_LOG_LENGTH);
                 }
                 index += MAX_LOG_LENGTH;
-                printAndroidLog(level, tag, head.concat("********(").concat(String.valueOf(count)).concat(")********").concat(subBody), throwable);
+                printAndroidLog(level, tag, head.concat("********(").concat(String.valueOf(count))
+                        .concat(")********").concat(subBody), throwable);
             }
         }
     }
@@ -230,19 +226,19 @@ class AndroidLogger implements ILogger {
             message = "Empty/NULL log message";
         }
         switch (level) {
-            case VERBOSE:
+            case android.util.Log.VERBOSE:
                 v(tag, message, throwable);
                 break;
-            case DEBUG:
+            case android.util.Log.DEBUG:
                 d(tag, message, throwable);
                 break;
-            case INFO:
+            case android.util.Log.INFO:
                 i(tag, message, throwable);
                 break;
-            case WARN:
+            case android.util.Log.WARN:
                 w(tag, message, throwable);
                 break;
-            case ERROR:
+            case android.util.Log.ERROR:
                 e(tag, message, throwable);
                 break;
             default:

@@ -3,12 +3,13 @@ package com.richie.easylog;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 日志工厂
+ * @author richie
+ *         日志工厂
  */
 public class LoggerFactory {
     private static final String DEFAULT_TAG = "logger";
     private static ILogger sEmptyLogger = new EmptyLogger();
-    private static ConcurrentHashMap<String, ILogger> sLoggerMap;
+    private static ConcurrentHashMap<String, ILogger> sLoggerMap = new ConcurrentHashMap<>();
     /**
      * 日志开关
      */
@@ -24,9 +25,6 @@ public class LoggerFactory {
         if (isLogEnabled()) {
             if (LogUtils.isEmpty(tag)) {
                 tag = DEFAULT_TAG;
-            }
-            if (sLoggerMap == null) {
-                sLoggerMap = new ConcurrentHashMap<>();
             }
             ILogger logger = sLoggerMap.get(tag);
             if (logger == null) {
