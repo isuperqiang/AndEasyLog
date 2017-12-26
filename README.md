@@ -1,7 +1,7 @@
 # AndEasyLog
 [![](https://jitpack.io/v/isuperqiang/AndEasyLog.svg)](https://jitpack.io/#isuperqiang/AndEasyLog)
 
-一个简洁实用的 Android 日志库
+一款简洁实用的 Android 日志库
 
 ### 添加依赖：
 第一步：在工程根目录 build.gradle 的 allprojects → repositories 下面添加 JitPack 仓库
@@ -27,13 +27,13 @@
 1. 支持 5 种日志打印级别：verbose、debug、info、warn、error
 2. 支持格式化打印 Json 和 Xml
 3. 支持打印代码执行时间、线程 ID 和行号
-4. 支持指定 Tag，配合 Studio 的 LiveTemplates 使用更酸爽
+4. 支持指定 Tag，配合 AS 的 LiveTemplates 使用更酸爽
 5. 支持打印无限长的日志，没有 4k 字符的限制
 
 ### 使用：
 1. **开关配置**：
 
-> 在程序入口的静态代码块中，配置全局日志的开关。
+> 在程序入口（一般是 Application）的静态代码块中，配置全局日志的开关。
 
 ```java
     /* 关闭日志打印，默认开启 */

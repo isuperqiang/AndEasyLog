@@ -6,7 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * 日志工厂
  */
 public class LoggerFactory {
-    private static ILogger sEmptyLogger;
+    private static final String DEFAULT_TAG = "logger";
+    private static ILogger sEmptyLogger = new EmptyLogger();
     private static ConcurrentHashMap<String, ILogger> sLoggerMap;
     /**
      * 日志开关
@@ -20,7 +21,10 @@ public class LoggerFactory {
      * @return log
      */
     public static ILogger getLogger(String tag) {
-        if (isLogEnabled() && !LogUtils.isEmpty(tag)) {
+        if (isLogEnabled()) {
+            if (LogUtils.isEmpty(tag)) {
+                tag = DEFAULT_TAG;
+            }
             if (sLoggerMap == null) {
                 sLoggerMap = new ConcurrentHashMap<>();
             }
@@ -31,9 +35,6 @@ public class LoggerFactory {
             }
             return logger;
         } else {
-            if (sEmptyLogger == null) {
-                sEmptyLogger = new EmptyLogger();
-            }
             return sEmptyLogger;
         }
     }
@@ -55,4 +56,5 @@ public class LoggerFactory {
     public static void setLogEnabled(boolean logEnabled) {
         sLogEnabled = logEnabled;
     }
+
 }
