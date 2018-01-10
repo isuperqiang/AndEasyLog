@@ -34,6 +34,8 @@ class AndroidLogger implements ILogger {
 
     private final String tag;
 
+    private FilePrinter mFilePrinter;
+
     AndroidLogger(String tag) {
         this.tag = tag;
     }
@@ -244,7 +246,15 @@ class AndroidLogger implements ILogger {
             default:
                 break;
         }
+
+        if (LogConfig.isPrint2File()) {
+            if (mFilePrinter == null) {
+                mFilePrinter = new FilePrinter();
+            }
+            mFilePrinter.printLog2File(tag, message, throwable);
+        }
     }
+
 
     private void v(String tag, String message, Throwable t) {
         if (t != null) {

@@ -17,8 +17,14 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        logger.verbose("onCreate()");
 
+        for (int i = 0; i < 10; i++) {
+
+            printTestLog();
+        }
+    }
+
+    private void printTestLog() {
         logger.info("********************************");
 
         logger.json("{\"上海\":[\"浦东\"],\"四川\":[\"成都\",\"攀枝花\"],\"福建\":[\"福州\",\"厦门\",\"泉州\"]}");
@@ -34,6 +40,5 @@ public class MainActivity extends Activity {
         logger.info("********************************");
 
         logger.debug("打印一段消息");
-
     }
 }

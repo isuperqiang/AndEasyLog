@@ -10,10 +10,6 @@ public class LoggerFactory {
     private static final String DEFAULT_TAG = "logger";
     private static ILogger sEmptyLogger = new EmptyLogger();
     private static ConcurrentHashMap<String, ILogger> sLoggerMap = new ConcurrentHashMap<>();
-    /**
-     * 日志开关
-     */
-    private static boolean sLogEnabled = true;
 
     /**
      * 根据 tag 获取日志
@@ -22,7 +18,7 @@ public class LoggerFactory {
      * @return log
      */
     public static ILogger getLogger(String tag) {
-        if (isLogEnabled()) {
+        if (LogConfig.isLogEnabled()) {
             if (LogUtils.isEmpty(tag)) {
                 tag = DEFAULT_TAG;
             }
@@ -45,14 +41,6 @@ public class LoggerFactory {
      */
     public static ILogger getLogger(Class clazz) {
         return getLogger(clazz.getSimpleName());
-    }
-
-    public static boolean isLogEnabled() {
-        return sLogEnabled;
-    }
-
-    public static void setLogEnabled(boolean logEnabled) {
-        sLogEnabled = logEnabled;
     }
 
 }
