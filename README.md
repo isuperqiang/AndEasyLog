@@ -83,7 +83,7 @@
 >  没有限制，随便混淆。
 
 ## 关于我
-* [博客](https://isuperqiang.github.io)
+* [博客](https://isuperqiang.cn)
 * [简书](http://www.jianshu.com/u/d5f18207fa2e)
 
 ## 许可
