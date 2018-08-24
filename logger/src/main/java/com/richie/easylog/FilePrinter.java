@@ -27,12 +27,12 @@ class FilePrinter {
     /**
      * 文件的名称以日期命名
      */
-    private final DateFormat mFileDateFormat = new SimpleDateFormat("MM-dd_HH-mm-ss", Locale.getDefault());
+    private final DateFormat mFileDateFormat = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault());
 
     /**
      * 在每一条日志前面增加一个时间戳
      */
-    private final DateFormat mLogDateFormat = new SimpleDateFormat("MM-dd HH:mm:ss:SS", Locale.getDefault());
+    private final DateFormat mLogDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SS", Locale.getDefault());
 
     /**
      * 日志命名的一部分：时间戳
@@ -43,7 +43,6 @@ class FilePrinter {
      * 日志全名拼接
      */
     private final String mLogFileName = mLogCreateTime + SAVE_FILE_TYPE;
-
 
     void printLog2File(final String tag, final String message, final Throwable throwable) {
         ThreadHelper.getInstance().execute(new Runnable() {
@@ -107,7 +106,9 @@ class FilePrinter {
             outputStream.write(content.getBytes("UTF-8"));
             outputStream.flush();
         } catch (Exception e) {
-            e.printStackTrace();
+            if (LogConfig.isLogEnabled()) {
+                e.printStackTrace();
+            }
         } finally {
             if (outputStream != null) {
                 try {

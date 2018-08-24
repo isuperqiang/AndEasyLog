@@ -1,8 +1,8 @@
 package com.richie.easylog;
 
 /**
- * @author richie
- *         日志接口
+ * @author Richie
+ * 日志接口
  */
 public interface ILogger {
 

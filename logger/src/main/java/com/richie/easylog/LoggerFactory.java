@@ -3,8 +3,8 @@ package com.richie.easylog;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author richie
- *         日志工厂
+ * @author Richie
+ * 日志工厂
  */
 public class LoggerFactory {
     private static final String DEFAULT_TAG = "logger";

@@ -14,22 +14,42 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 /**
- * @author richie
- *         Android 日志打印
+ * @author Richie
+ * Android 日志打印
  */
 class AndroidLogger implements ILogger {
 
-    /* Json 字符 缩进距离 */
+    /**
+     * Json 字符 缩进距离
+     */
     private static final int JSON_INDENT = 2;
-    /* 当前日志构建时间 */
+    /**
+     * 当前日志构建时间
+     */
     private static final long BEGINNING_TIME = System.nanoTime();
-    /* 参数占位符 */
+    /**
+     * 参数占位符
+     */
     private static final String PARAMS_PLACEHOLDER = "{}";
-    /* 错误日志格式 */
-    private static final String ERROR_LOG_FORMAT = "Log format error";
-    /* 单次打印最大长度 */
+    /**
+     * Json 对象前缀
+     */
+    private static final String JSON_OBJECT_PREFIX = "{";
+    /**
+     * Json 数组前缀
+     */
+    private static final String JSON_ARRAY_PREFIX = "[";
+    /**
+     * 错误日志格式
+     */
+    private static final String LOG_FORMAT_ERROR = "Log format error";
+    /**
+     * 单次打印最大长度
+     */
     private static final int MAX_LOG_LENGTH = 4000;
-    /* 纳秒转换成毫秒的倍数 */
+    /**
+     * 纳秒转换成毫秒的倍数
+     */
     private static final int TIME_CONVERT_UNIT = 1000000;
 
     private final String tag;
@@ -94,14 +114,13 @@ class AndroidLogger implements ILogger {
         try {
             json = json.trim();
             StringBuilder message = new StringBuilder();
-            if (json.startsWith("{")) {
+            if (json.startsWith(JSON_OBJECT_PREFIX)) {
                 JSONObject jsonObject = new JSONObject(json);
                 message.append("JsonObject length:")
                         .append(jsonObject.length())
                         .append("\n")
                         .append(jsonObject.toString(JSON_INDENT));
-            }
-            if (json.startsWith("[")) {
+            } else if (json.startsWith(JSON_ARRAY_PREFIX)) {
                 JSONArray jsonArray = new JSONArray(json);
                 message.append("JsonArray length:")
                         .append(jsonArray.length())
@@ -155,7 +174,7 @@ class AndroidLogger implements ILogger {
         StringBuilder body = new StringBuilder();
         if (message == null) {
             if (params.length != 0) {
-                return ERROR_LOG_FORMAT;
+                return LOG_FORMAT_ERROR;
             } else {
                 return "";
             }
@@ -176,7 +195,7 @@ class AndroidLogger implements ILogger {
             return body.toString();
         } catch (Throwable e) {
             warn(e);
-            return ERROR_LOG_FORMAT;
+            return LOG_FORMAT_ERROR;
         }
     }
 
@@ -225,7 +244,7 @@ class AndroidLogger implements ILogger {
 
     private void printAndroidLog(int level, String tag, String message, Throwable throwable) {
         if (LogUtils.isEmpty(message)) {
-            message = "Empty/NULL log message";
+            message = "Empty/Null log message";
         }
         switch (level) {
             case android.util.Log.VERBOSE:

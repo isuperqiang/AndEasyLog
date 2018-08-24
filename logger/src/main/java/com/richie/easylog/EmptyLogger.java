@@ -1,6 +1,7 @@
 package com.richie.easylog;
 
 /**
+ * @author Richie
  * ILogger 空实现
  */
 class EmptyLogger implements ILogger {

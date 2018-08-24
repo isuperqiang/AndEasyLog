@@ -16,11 +16,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Richie
- *         多线程工具类
+ * 多线程工具类
  */
 public class ThreadHelper {
-    private Handler mMainHandler;
-    private ExecutorService mExecutorService;
+    private final Handler mMainHandler;
+    private final ExecutorService mExecutorService;
     private Handler mWorkHandler;
 
     private ThreadHelper() {
@@ -30,7 +30,7 @@ public class ThreadHelper {
 
             @Override
             public Thread newThread(Runnable r) {
-                return new Thread(r, "ThreadHelper #".concat(String.valueOf(mCount.getAndIncrement())));
+                return new Thread(r, "ThreadHelper#".concat(String.valueOf(mCount.getAndIncrement())));
             }
         };
         int cpuCount = Runtime.getRuntime().availableProcessors();
@@ -158,21 +158,27 @@ public class ThreadHelper {
      *
      * @param r
      */
-    public void removeCallbacks(Runnable r) {
+    public void removeWorkCallbacks(Runnable r) {
         if (mWorkHandler != null) {
             mWorkHandler.removeCallbacks(r);
         }
     }
 
     /**
-     * 结束线程池
+     * 结束线程
      */
     public void shutdown() {
         if (!mExecutorService.isShutdown()) {
             mExecutorService.shutdown();
         }
         if (mWorkHandler != null) {
-            mWorkHandler.getLooper().getThread().interrupt();
+            try {
+                mWorkHandler.getLooper().getThread().interrupt();
+            } catch (Throwable e) {
+                if (LogConfig.isLogEnabled()) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

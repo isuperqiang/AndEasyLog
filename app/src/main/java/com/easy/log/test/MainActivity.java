@@ -18,8 +18,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        for (int i = 0; i < 10; i++) {
-
+        for (int i = 0; i < 1; i++) {
             printTestLog();
         }
     }
@@ -36,7 +35,7 @@ public class MainActivity extends Activity {
         logger.debug("打印多个参数。String:{}, int:{}, float:{}, long:{}, boolean:{}, char:{} etc.", "Log", 1, 10.24F, 1024L, false, 'c');
         logger.info("********************************");
 
-        logger.warn(new NullPointerException("NPE"));
+        logger.warn(new NullPointerException("NPE example"));
         logger.info("********************************");
 
         logger.debug("打印一段消息");

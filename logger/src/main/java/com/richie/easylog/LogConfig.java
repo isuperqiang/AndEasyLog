@@ -2,7 +2,7 @@ package com.richie.easylog;
 
 /**
  * @author Richie on 2018.01.10
- *         日志配置
+ * 日志配置
  */
 public class LogConfig {
     /**
