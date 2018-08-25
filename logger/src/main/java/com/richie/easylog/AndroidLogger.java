@@ -241,7 +241,7 @@ class AndroidLogger implements ILogger {
     private void processLog(int level, String tag, String head, String body, Throwable throwable) {
         int length = body.length();
         if (length < MAX_LOG_LENGTH) {
-            printAndroidLog(level, tag, head + body, throwable);
+            printLog(level, tag, head + body, throwable);
         } else {
             int index = 0;
             int count = 0;
@@ -254,13 +254,13 @@ class AndroidLogger implements ILogger {
                     subBody = body.substring(index, index + MAX_LOG_LENGTH);
                 }
                 index += MAX_LOG_LENGTH;
-                printAndroidLog(level, tag, head.concat("********(").concat(String.valueOf(count))
+                printLog(level, tag, head.concat("********(").concat(String.valueOf(count))
                         .concat(")********").concat(subBody), throwable);
             }
         }
     }
 
-    private void printAndroidLog(int level, String tag, String message, Throwable throwable) {
+    private void printLog(int level, String tag, String message, Throwable throwable) {
         if (LogUtils.isEmpty(message)) {
             message = "Empty/Null log message";
         }
@@ -268,7 +268,7 @@ class AndroidLogger implements ILogger {
             printLogcat(level, tag, message, throwable);
         }
         if (LogConfig.isLogFileEnabled() && !LogUtils.isEmpty(LogConfig.getLogFileDir())) {
-            printLog2File(tag, message, throwable);
+            printLogFile(tag, message, throwable);
         }
     }
 
@@ -294,7 +294,7 @@ class AndroidLogger implements ILogger {
         }
     }
 
-    private void printLog2File(final String tag, final String message, final Throwable throwable) {
+    private void printLogFile(final String tag, final String message, final Throwable throwable) {
         EXECUTOR.execute(new Runnable() {
             @Override
             public void run() {

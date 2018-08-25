@@ -18,15 +18,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        printTestLog();
-
-        for (int i = 0; i < 10; i++) {
-            ThreadHelper.getInstance().execute(new Runnable() {
-                @Override
-                public void run() {
-                    printTestLog();
-                }
-            });
+        for (int i = 0; i < 3; i++) {
+            printTestLog();
         }
     }
 
