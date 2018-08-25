@@ -30,11 +30,11 @@ import javax.xml.transform.stream.StreamSource;
 class AndroidLogger implements ILogger {
 
     /**
-     * Json 字符 缩进距离
+     * Json 字符缩进距离
      */
     private static final int JSON_INDENT = 2;
     /**
-     * 当前日志构建时间
+     * 日志创建时间
      */
     private static final long BEGINNING_TIME = System.nanoTime();
     /**
@@ -42,7 +42,7 @@ class AndroidLogger implements ILogger {
      */
     private static final String PARAMS_PLACEHOLDER = "{}";
     /**
-     * 单次打印最大长度
+     * 单条打印最大长度
      */
     private static final int MAX_LOG_LENGTH = 4000;
     /**
@@ -171,24 +171,24 @@ class AndroidLogger implements ILogger {
     }
 
     private void log(int level, String tag, String message, Throwable throwable, Object... params) {
-        String header = createHeader();
-        String body = parseMessage(message, params);
+        String header = createLogHeader();
+        String body = parseLogMessage(message, params);
         processLog(level, tag, header, body, throwable);
     }
 
-    private String createHeader() {
+    private String createLogHeader() {
         long usedTime = (System.nanoTime() - BEGINNING_TIME) / TIME_CONVERT_UNIT;
-        StringBuilder header = new StringBuilder("[time:");
-        header.append(usedTime);
-        header.append("][tid:");
-        header.append(Thread.currentThread().getId());
-        header.append("][line:");
-        header.append(getLineNumber());
-        header.append("] ");
-        return header.toString();
+        StringBuilder sb = new StringBuilder("[time:");
+        sb.append(usedTime);
+        sb.append("][tid:");
+        sb.append(Thread.currentThread().getId());
+        sb.append("][line:");
+        sb.append(getLineNumber());
+        sb.append("] ");
+        return sb.toString();
     }
 
-    private String parseMessage(String message, Object[] params) {
+    private String parseLogMessage(String message, Object[] params) {
         StringBuilder sb = new StringBuilder();
         if (message == null) {
             if (params.length != 0) {
@@ -301,7 +301,13 @@ class AndroidLogger implements ILogger {
                 String logContent = createLogContent(tag, message, throwable);
                 File file = createLogFile();
                 if (file != null) {
-                    write2File(file, logContent);
+                    try {
+                        write2File(file, logContent);
+                    } catch (IOException e) {
+                        if (LogConfig.isLogcatEnabled()) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
         });
@@ -345,24 +351,14 @@ class AndroidLogger implements ILogger {
         }
     }
 
-    private void write2File(final File logFile, final String content) {
+    private void write2File(final File logFile, final String content) throws IOException {
         BufferedWriter bufferedWriter = null;
         try {
             bufferedWriter = new BufferedWriter(new FileWriter(logFile, true));
             bufferedWriter.write(content);
-        } catch (IOException e) {
-            if (LogConfig.isLogcatEnabled()) {
-                e.printStackTrace();
-            }
         } finally {
             if (bufferedWriter != null) {
-                try {
-                    bufferedWriter.close();
-                } catch (IOException e) {
-                    if (LogConfig.isLogcatEnabled()) {
-                        e.printStackTrace();
-                    }
-                }
+                bufferedWriter.close();
             }
         }
     }
