@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Richie
  * 日志工厂
  */
-public class LoggerFactory {
+public final class LoggerFactory {
     private static final String DEFAULT_TAG = "logger";
     private static ILogger sEmptyLogger = new EmptyLogger();
     private static ConcurrentHashMap<String, ILogger> sLoggerMap = new ConcurrentHashMap<>();
@@ -18,7 +18,7 @@ public class LoggerFactory {
      * @return log
      */
     public static ILogger getLogger(String tag) {
-        if (LogConfig.isLogEnabled()) {
+        if (LogConfig.isLogcatEnabled() || LogConfig.isLogFileEnabled()) {
             if (LogUtils.isEmpty(tag)) {
                 tag = DEFAULT_TAG;
             }

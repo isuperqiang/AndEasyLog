@@ -4,41 +4,38 @@ package com.richie.easylog;
  * @author Richie on 2018.01.10
  * 日志配置
  */
-public class LogConfig {
+public final class LogConfig {
     /**
-     * 日志开关
+     * Logcat 日志开关
      */
-    private static boolean sLogEnabled = true;
+    private static boolean sLogcatEnabled = false;
     /**
-     * 打印到文件
+     * 文件日志开关
      */
-    private static boolean sPrint2File = false;
+    private static boolean sLogFileEnabled = false;
     /**
-     * 日志文件保存路径
+     * 日志文件保存的目录
      */
-    private static String sLogPrintDir = "/sdcard/AndEasyLog";
+    private static String sLogFileDir;
 
-    public static boolean isLogEnabled() {
-        return sLogEnabled;
+    public static boolean isLogcatEnabled() {
+        return sLogcatEnabled;
     }
 
-    public static void setLogEnabled(boolean logEnabled) {
-        sLogEnabled = logEnabled;
+    public static void setLogcatEnabled(boolean logEnabled) {
+        sLogcatEnabled = logEnabled;
     }
 
-    public static boolean isPrint2File() {
-        return sPrint2File;
+    public static boolean isLogFileEnabled() {
+        return sLogFileEnabled;
     }
 
-    public static void setPrint2File(boolean print2File) {
-        sPrint2File = print2File;
+    public static String getLogFileDir() {
+        return sLogFileDir;
     }
 
-    public static void setPrintLogDir(String logPath) {
-        sLogPrintDir = logPath;
-    }
-
-    public static String getLogPrintDir() {
-        return sLogPrintDir;
+    public static void setLogFileConfig(boolean logFileEnabled, String logFileDir) {
+        sLogFileEnabled = logFileEnabled;
+        sLogFileDir = logFileDir;
     }
 }

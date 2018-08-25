@@ -19,7 +19,7 @@
 
 ```
     dependencies {
-        implementation 'com.github.isuperqiang:AndEasyLog:1.2.0'
+        implementation 'com.github.isuperqiang:AndEasyLog:1.3.0'
     }
 ```
 
@@ -29,17 +29,19 @@
 3. 支持打印代码执行时间、线程 ID 和行号
 4. 支持指定 Tag，配合 AS 的 LiveTemplates 使用更酸爽
 5. 支持打印无限长的日志，没有 4k 字符的限制
+6. 支持输出到文件，配置保存目录即可
 
 ### 使用：
 1. **开关配置**：
 
-> 在程序入口（一般是 Application）的静态代码块中，配置全局日志的开关。
+> 在程序入口（一般是 Application）的 onCreate 方法中，配置全局日志的开关。
 
 ```java
-    /* 关闭日志打印，默认开启 */
-    static {
-         LoggerFactory.setLogEnabled(false);
-    }
+    /*打开 logcat 日志*/
+    LogConfig.setLogcatEnabled(true);
+
+    /*打开 文件 日志*/
+    LogConfig.setLogFileConfig(true, dir);
 ```
 
 2. **初始化**：
@@ -55,24 +57,12 @@
 3. **打印日志**：
 
 * `logger.debug("打印一段消息");`
-
-  <img src='images/log-debug.jpg'/>
-
 * `logger.debug("打印多个参数。String:{}, int:{}, long:{}, boolean:{}, char:{} etc.", "AndroidLog", 100, 1000L, false, 'c');`
-
-  <img src='images/log-params.jpg'/>
-
 * `logger.json("{\"上海\":[\"浦东\"],\"四川\":[\"成都\",\"攀枝花\"],\"福建\":[\"福州\",\"厦门\",\"泉州\"]}");`
-
-  <img src='images/log-json.jpg'/>
-
 * `logger.xml("<?xml version=\"1.0\"?><note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>");`
-
-  <img src='images/log-xml.jpg'/>
-
 * `logger.warn(new NullPointerException("NPE"));`
 
-  <img src='images/log-warn.jpg'/>
+  <img src='images/log_snapshot.jpg'/>
 
 4. **消息说明**：
 

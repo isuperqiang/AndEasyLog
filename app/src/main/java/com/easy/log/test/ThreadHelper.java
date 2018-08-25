@@ -1,8 +1,10 @@
-package com.richie.easylog;
+package com.easy.log.test;
 
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+
+import com.richie.easylog.LogConfig;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -18,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Richie
  * 多线程工具类
  */
-public class ThreadHelper {
+public final class ThreadHelper {
     private final Handler mMainHandler;
     private final ExecutorService mExecutorService;
     private Handler mWorkHandler;
@@ -61,7 +63,7 @@ public class ThreadHelper {
         try {
             mExecutorService.execute(r);
         } catch (Throwable e) {
-            if (LogConfig.isLogEnabled()) {
+            if (LogConfig.isLogcatEnabled()) {
                 e.printStackTrace();
             }
         }
@@ -78,7 +80,7 @@ public class ThreadHelper {
         try {
             return mExecutorService.submit(task);
         } catch (Throwable e) {
-            if (LogConfig.isLogEnabled()) {
+            if (LogConfig.isLogcatEnabled()) {
                 e.printStackTrace();
             }
         }
@@ -175,7 +177,7 @@ public class ThreadHelper {
             try {
                 mWorkHandler.getLooper().getThread().interrupt();
             } catch (Throwable e) {
-                if (LogConfig.isLogEnabled()) {
+                if (LogConfig.isLogcatEnabled()) {
                     e.printStackTrace();
                 }
             }
