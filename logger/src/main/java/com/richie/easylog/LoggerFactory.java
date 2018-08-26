@@ -1,5 +1,11 @@
 package com.richie.easylog;
 
+import android.annotation.SuppressLint;
+import android.app.Application;
+import android.content.Context;
+
+import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -9,7 +15,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class LoggerFactory {
     private static final String DEFAULT_TAG = "logger";
     private static ILogger sEmptyLogger = new EmptyLogger();
-    private static ConcurrentHashMap<String, ILogger> sLoggerMap = new ConcurrentHashMap<>();
+    private static Map<String, ILogger> sLoggerMap = new ConcurrentHashMap<>();
+    private static Context sAppContext;
 
     /**
      * 根据 tag 获取日志
@@ -43,4 +50,30 @@ public final class LoggerFactory {
         return getLogger(clazz.getSimpleName());
     }
 
+    /**
+     * 获取 Application Context
+     *
+     * @return context
+     */
+    @SuppressLint("PrivateApi")
+    public static Context getAppContext() {
+        if (sAppContext == null) {
+            try {
+                ClassLoader loader = Context.class.getClassLoader();
+                Class<?> c = loader.loadClass("android.app.ActivityThread");
+                Method currentActivityThreadM = c.getDeclaredMethod("currentActivityThread");
+                currentActivityThreadM.setAccessible(true);
+                Object currentActivityThread = currentActivityThreadM.invoke(null);
+                Method getApplicationM = c.getDeclaredMethod("getApplication");
+                getApplicationM.setAccessible(true);
+                Application application = (Application) getApplicationM.invoke(currentActivityThread);
+                sAppContext = application.getApplicationContext();
+            } catch (Throwable e) {
+                if (LogConfig.isLogcatEnabled()) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return sAppContext;
+    }
 }

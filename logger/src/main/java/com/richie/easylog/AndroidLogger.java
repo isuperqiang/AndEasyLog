@@ -1,5 +1,9 @@
 package com.richie.easylog;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.os.Build;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -36,7 +40,7 @@ class AndroidLogger implements ILogger {
     /**
      * 日志创建时间
      */
-    private static final long BEGINNING_TIME = System.nanoTime();
+    private static final long CREATE_TIME = System.nanoTime();
     /**
      * 参数占位符
      */
@@ -44,17 +48,17 @@ class AndroidLogger implements ILogger {
     /**
      * 单条打印最大长度
      */
-    private static final int MAX_LOG_LENGTH = 4000;
+    private static final int MESSAGE_MAX_LENGTH = 4000;
     /**
      * 纳秒转换成毫秒的倍数
      */
     private static final int TIME_CONVERT_UNIT = 1000000;
     /**
-     * 分割线
+     * 添加到日志文件的分割线
      */
     private static final String SEPARATOR = " || ";
     /**
-     * 日志的保存的类型
+     * 日志保存后的文件类型
      */
     private static final String LOG_FILE_TYPE = ".log";
     /**
@@ -177,7 +181,7 @@ class AndroidLogger implements ILogger {
     }
 
     private String createLogHeader() {
-        long usedTime = (System.nanoTime() - BEGINNING_TIME) / TIME_CONVERT_UNIT;
+        long usedTime = (System.nanoTime() - CREATE_TIME) / TIME_CONVERT_UNIT;
         StringBuilder sb = new StringBuilder("[time:");
         sb.append(usedTime);
         sb.append("][tid:");
@@ -233,14 +237,16 @@ class AndroidLogger implements ILogger {
                 }
             }
         } catch (Throwable e) {
-            // ignored
+            if (LogConfig.isLogcatEnabled()) {
+                e.printStackTrace();
+            }
         }
         return 0;
     }
 
     private void processLog(int level, String tag, String head, String body, Throwable throwable) {
         int length = body.length();
-        if (length < MAX_LOG_LENGTH) {
+        if (length < MESSAGE_MAX_LENGTH) {
             printLog(level, tag, head + body, throwable);
         } else {
             int index = 0;
@@ -248,12 +254,12 @@ class AndroidLogger implements ILogger {
             String subBody;
             while (index < length) {
                 count++;
-                if (length <= index + MAX_LOG_LENGTH) {
+                if (length <= index + MESSAGE_MAX_LENGTH) {
                     subBody = body.substring(index);
                 } else {
-                    subBody = body.substring(index, index + MAX_LOG_LENGTH);
+                    subBody = body.substring(index, index + MESSAGE_MAX_LENGTH);
                 }
-                index += MAX_LOG_LENGTH;
+                index += MESSAGE_MAX_LENGTH;
                 printLog(level, tag, head.concat("********(").concat(String.valueOf(count))
                         .concat(")********").concat(subBody), throwable);
             }
@@ -327,6 +333,31 @@ class AndroidLogger implements ILogger {
         return sb.toString();
     }
 
+    private String getDeviceInfo() {
+        String versionName = "";
+        int versionCode = 0;
+        Context context = LoggerFactory.getAppContext();
+        try {
+            PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            versionName = pi.versionName;
+            versionCode = pi.versionCode;
+        } catch (Exception e) {
+            if (LogConfig.isLogcatEnabled()) {
+                e.printStackTrace();
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("************* Log Head ****************");
+        sb.append("\nDevice Manufacturer: ").append(Build.MANUFACTURER)
+                .append("\nDevice Model       : ").append(Build.MODEL)
+                .append("\nAndroid Version    : ").append(Build.VERSION.RELEASE)
+                .append("\nAndroid SDK        : ").append(Build.VERSION.SDK_INT)
+                .append("\nApp VersionName    : ").append(versionName)
+                .append("\nApp VersionCode    : ").append(versionCode)
+                .append("\n************* Log Head ****************\n\n");
+        return sb.toString();
+    }
+
     private File createLogFile() {
         File logDir = new File(LogConfig.getLogFileDir());
         if (!logDir.exists()) {
@@ -339,7 +370,12 @@ class AndroidLogger implements ILogger {
         File logFile = new File(logDir, LOG_FILE_NAME);
         if (!logFile.exists()) {
             try {
-                return logFile.createNewFile() ? logFile : null;
+                boolean ret = logFile.createNewFile();
+                if (ret) {
+                    String deviceInfo = getDeviceInfo();
+                    write2File(logFile, deviceInfo);
+                }
+                return ret ? logFile : null;
             } catch (IOException e) {
                 if (LogConfig.isLogcatEnabled()) {
                     e.printStackTrace();
