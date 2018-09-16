@@ -19,7 +19,7 @@
 
 ```
     dependencies {
-        implementation 'com.github.isuperqiang:AndEasyLog:1.3.1'
+        implementation 'com.github.isuperqiang:AndEasyLog:1.4.0'
     }
 ```
 
@@ -64,13 +64,13 @@
 
   <img src='images/log_snapshot.jpg'/>
 
-4. **消息说明**：
+4. **日志说明**：
 
->  time: 从日志创建起经过的毫秒时间值；tid: 线程 ID；line: 行号。
+>  \[线程名称\](方法行号) 消息内容
 
 5. **混淆规则**：
 
->  没有限制，随便混淆。
+>  没有限制，随便混淆
 
 ## 关于我
 * [博客](https://isuperqiang.cn)
@@ -89,6 +89,6 @@ You may obtain a copy of the License at
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
+See the License for the specifAAic language governing permissions and
 limitations under the License.
 </pre>
