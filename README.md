@@ -25,9 +25,9 @@
 
 ### 特点：
 1. 支持 5 种日志打印级别：verbose、debug、info、warn、error
-2. 支持格式化打印 Json 和 Xml，直接打印数组
-3. 支持打印当前的线程名称和日志行号
-4. 支持指定日志 Tag，一般使用当前类名作为 Tag
+2. 支持格式化打印 JSON 和 XML，可以直接打印数组
+3. 支持打印当前线程名称和日志行号
+4. 支持设定日志 Tag，一般使用当前类名作为 Tag
 5. 支持打印无限长的日志，没有 4k 字符的限制
 6. 支持输出到文件，配置保存目录即可
 7. 导入 extra 文件夹下的 live-template-settings.jar，即可使用快捷输入
@@ -63,7 +63,7 @@
 * `logger.xml("<?xml version=\"1.0\"?><note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>");`
 * `logger.warn(new NullPointerException("NPE"));`
 
-  <img src='images/log_snapshot.jpg'/>
+  <img src='extra/log_snapshot.jpg'/>
 
 4. **日志说明**：
 
