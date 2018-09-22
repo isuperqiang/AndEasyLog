@@ -1,9 +1,11 @@
 package com.richie.easylog;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -201,7 +203,15 @@ class AndroidLogger implements ILogger {
                 int j = message.indexOf(PARAMS_PLACEHOLDER, index);
                 if (j != -1) {
                     sb.append(message.substring(index, j));
-                    sb.append(LogUtils.toString(param));
+                    if (param.getClass().isArray()) {
+                        sb.append(LogUtils.array2String(param));
+                    } else if (param instanceof Intent) {
+                        sb.append(LogUtils.intent2String((Intent) param));
+                    } else if (param instanceof Bundle) {
+                        sb.append(LogUtils.bundle2String((Bundle) param));
+                    } else {
+                        sb.append(param);
+                    }
                     index = j + 2;
                 } else {
                     break;

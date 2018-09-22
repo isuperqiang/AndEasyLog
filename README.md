@@ -19,13 +19,13 @@
 
 ```
     dependencies {
-        implementation 'com.github.isuperqiang:AndEasyLog:1.4.0'
+        implementation 'com.github.isuperqiang:AndEasyLog:1.5.0'
     }
 ```
 
 ### 特点：
 1. 支持 5 种日志打印级别：verbose、debug、info、warn、error
-2. 支持格式化打印 JSON 和 XML，可以直接打印数组
+2. 支持格式化打印 JSON 和 XML，可以直接打印数组、Intent 和 Bundle
 3. 支持打印当前线程名称和日志行号
 4. 支持设定日志 Tag，一般使用当前类名作为 Tag
 5. 支持打印无限长的日志，没有 4k 字符的限制
@@ -56,6 +56,8 @@
 `private final ILogger logger = LoggerFactory.getLogger(MainActivity.class);`
 
 3. **打印日志**：
+
+> 多个参数时，建议使用占位符 {}，避免手动拼接长字符串。
 
 * `logger.debug("打印一段消息");`
 * `logger.debug("打印多个参数。String:{}, int:{}, long:{}, boolean:{}, char:{} etc.", "AndroidLog", 100, 1000L, false, 'c');`
