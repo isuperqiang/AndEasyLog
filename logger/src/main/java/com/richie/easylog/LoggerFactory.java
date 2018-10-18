@@ -25,7 +25,7 @@ public final class LoggerFactory {
      * @return log
      */
     public static ILogger getLogger(String tag) {
-        if (LogConfig.isLogcatEnabled() || LogConfig.isLogFileEnabled()) {
+        if (LoggerConfig.isLogcatEnabled() || LoggerConfig.isLogFileEnabled()) {
             if (LogUtils.isEmpty(tag)) {
                 tag = DEFAULT_TAG;
             }
@@ -69,7 +69,7 @@ public final class LoggerFactory {
                 Application application = (Application) getApplicationM.invoke(currentActivityThread);
                 sAppContext = application.getApplicationContext();
             } catch (Throwable e) {
-                if (LogConfig.isLogcatEnabled()) {
+                if (LoggerConfig.isLogcatEnabled()) {
                     e.printStackTrace();
                 }
             }

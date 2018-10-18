@@ -17,6 +17,6 @@ public class LogApp extends Application {
         /*打开 logcat 日志*/
         LogConfig.setLogcatEnabled(true);
         /*打开 文件 日志*/
-        LogConfig.setLogFileConfig(true, getExternalFilesDir(null).getAbsolutePath() + File.separator + "log");
+        LogConfig.setLogFileConfig(true, getExternalFilesDir(null).getAbsolutePath() + File.separator + "logger");
     }
 }

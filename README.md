@@ -19,7 +19,7 @@
 
 ```
     dependencies {
-        implementation 'com.github.isuperqiang:AndEasyLog:1.5.0'
+        implementation 'com.github.isuperqiang:AndEasyLog:1.5.2'
     }
 ```
 
@@ -39,10 +39,10 @@
 
 ```java
     /*打开 logcat 日志*/
-    LogConfig.setLogcatEnabled(true);
+    LoggerConfig.setLogcatEnabled(true);
 
     /*打开 文件 日志*/
-    LogConfig.setLogFileConfig(true, dir);
+    LoggerConfig.setLogFileConfig(true, dir);
 ```
 
 2. **初始化**：

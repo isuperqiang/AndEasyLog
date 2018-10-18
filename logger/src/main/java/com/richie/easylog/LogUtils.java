@@ -2,15 +2,14 @@ package com.richie.easylog;
 
 import android.content.ClipData;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.UnknownHostException;
+import java.io.File;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
@@ -33,34 +32,6 @@ class LogUtils {
         } else {
             return false;
         }
-    }
-
-    /**
-     * Copied from "android.util.Log.getStackTraceString()" in order to avoid usage of Android stack
-     * in unit tests.
-     *
-     * @return Stack trace in form of String
-     */
-    static String getStackTraceString(Throwable tr) {
-        if (tr == null) {
-            return "";
-        }
-
-        // This is to reduce the amount of log spew that apps do in the non-error
-        // condition of the network being unavailable.
-        Throwable t = tr;
-        while (t != null) {
-            if (t instanceof UnknownHostException) {
-                return "";
-            }
-            t = t.getCause();
-        }
-
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        tr.printStackTrace(pw);
-        pw.flush();
-        return sw.toString();
     }
 
     public static String array2String(Object object) {
@@ -220,7 +191,7 @@ class LogUtils {
             String key = iterator.next();
             Object value = bundle.get(key);
             sb.append(key).append('=');
-            if (value != null && value instanceof Bundle) {
+            if (value instanceof Bundle) {
                 sb.append(value == bundle ? "(this Bundle)" : bundle2String((Bundle) value));
             } else {
                 sb.append(value);
@@ -239,7 +210,10 @@ class LogUtils {
             return;
         }
         sb.append("ClipData.Item { ");
-        String mHtmlText = item.getHtmlText();
+        String mHtmlText = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            mHtmlText = item.getHtmlText();
+        }
         if (mHtmlText != null) {
             sb.append("H:");
             sb.append(mHtmlText);
@@ -268,5 +242,18 @@ class LogUtils {
         }
         sb.append("NULL");
         sb.append("}");
+    }
+
+    public static String getLogFileDir(Context context) {
+        File defaultFileDir = getDefaultFileDir(context);
+        return new File(defaultFileDir, "logger").getAbsolutePath();
+    }
+
+    public static File getDefaultFileDir(Context context) {
+        File filesDir = context.getExternalFilesDir("");
+        if (filesDir == null) {
+            filesDir = context.getFilesDir();
+        }
+        return filesDir;
     }
 }
