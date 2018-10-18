@@ -1,18 +1,13 @@
 package com.richie.easylog;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -53,12 +48,11 @@ class AndroidLogger implements ILogger {
     /**
      * 日志文件的名称，应用运行期间，保存到同一个文件
      */
-    private static final String LOG_FILE_NAME = new SimpleDateFormat("yyyyMMdd_HHmmss",
-            Locale.getDefault()).format(new Date()) + ".log";
+    private static String sLogFileName;
     /**
      * 写文件的线程池
      */
-    private static final Executor EXECUTOR = Executors.newSingleThreadExecutor();
+    private static Executor sExecutor;
 
     private final String tag;
 
@@ -133,7 +127,7 @@ class AndroidLogger implements ILogger {
                         .append("\n")
                         .append(jsonArray.toString(JSON_INDENT));
             } else {
-                sb.append("Invalid JSON");
+                sb.append("Invalid JSON:\n").append(json);
             }
             debug(sb.toString());
         } catch (Throwable e) {
@@ -186,6 +180,7 @@ class AndroidLogger implements ILogger {
                 return "";
             }
         }
+
         try {
             StringBuilder sb = new StringBuilder();
             int index = 0;
@@ -279,19 +274,19 @@ class AndroidLogger implements ILogger {
 
     private void printLogcat(int level, String tag, String message, Throwable throwable) {
         switch (level) {
-            case android.util.Log.VERBOSE:
+            case Log.VERBOSE:
                 v(tag, message, throwable);
                 break;
-            case android.util.Log.DEBUG:
+            case Log.DEBUG:
                 d(tag, message, throwable);
                 break;
-            case android.util.Log.INFO:
+            case Log.INFO:
                 i(tag, message, throwable);
                 break;
-            case android.util.Log.WARN:
+            case Log.WARN:
                 w(tag, message, throwable);
                 break;
-            case android.util.Log.ERROR:
+            case Log.ERROR:
                 e(tag, message, throwable);
                 break;
             default:
@@ -299,14 +294,19 @@ class AndroidLogger implements ILogger {
     }
 
     private void printLogFile(final String tag, final String message, final Throwable throwable) {
-        EXECUTOR.execute(new Runnable() {
+        synchronized (AndroidLogger.class) {
+            if (sExecutor == null) {
+                sExecutor = Executors.newSingleThreadExecutor();
+            }
+        }
+        sExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 String logContent = createLogContent(tag, message, throwable);
                 File file = createLogFile();
                 if (file != null) {
                     try {
-                        writeContent2File(file, logContent);
+                        LogUtils.writeText2File(file, logContent);
                     } catch (IOException e) {
                         if (LoggerConfig.isLogcatEnabled()) {
                             e.printStackTrace();
@@ -333,31 +333,6 @@ class AndroidLogger implements ILogger {
         return sb.toString();
     }
 
-    private String getDeviceInfo() {
-        String versionName = "";
-        int versionCode = 0;
-        Context context = LoggerFactory.getAppContext();
-        try {
-            PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            versionName = pi.versionName;
-            versionCode = pi.versionCode;
-        } catch (Throwable e) {
-            if (LoggerConfig.isLogcatEnabled()) {
-                e.printStackTrace();
-            }
-        }
-        StringBuilder sb = new StringBuilder();
-        sb.append("************* Log Head ****************");
-        sb.append("\nDevice Manufacturer: ").append(Build.MANUFACTURER)
-                .append("\nDevice Model       : ").append(Build.MODEL)
-                .append("\nAndroid Version    : ").append(Build.VERSION.RELEASE)
-                .append("\nAndroid SDK        : ").append(Build.VERSION.SDK_INT)
-                .append("\nApp VersionName    : ").append(versionName)
-                .append("\nApp VersionCode    : ").append(versionCode)
-                .append("\n************* Log Head ****************\n\n");
-        return sb.toString();
-    }
-
     private File createLogFile() {
         if (LogUtils.isEmpty(LoggerConfig.getLogFileDir())) {
             LoggerConfig.setLogFileConfig(true, LogUtils.getLogFileDir(LoggerFactory.getAppContext()));
@@ -370,14 +345,17 @@ class AndroidLogger implements ILogger {
                 return null;
             }
         }
-
-        File logFile = new File(logDir, LOG_FILE_NAME);
+        if (LogUtils.isEmpty(sLogFileName)) {
+            sLogFileName = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                    Locale.getDefault()).format(new Date()) + ".log";
+        }
+        File logFile = new File(logDir, sLogFileName);
         if (!logFile.exists()) {
             try {
                 boolean ret = logFile.createNewFile();
                 if (ret) {
-                    String deviceInfo = getDeviceInfo();
-                    writeContent2File(logFile, deviceInfo);
+                    String deviceInfo = LogUtils.getDeviceInfo();
+                    LogUtils.writeText2File(logFile, deviceInfo);
                 }
                 return ret ? logFile : null;
             } catch (IOException e) {
@@ -388,18 +366,6 @@ class AndroidLogger implements ILogger {
             }
         } else {
             return logFile;
-        }
-    }
-
-    private void writeContent2File(final File logFile, final String content) throws IOException {
-        BufferedWriter bufferedWriter = null;
-        try {
-            bufferedWriter = new BufferedWriter(new FileWriter(logFile, true));
-            bufferedWriter.write(content);
-        } finally {
-            if (bufferedWriter != null) {
-                bufferedWriter.close();
-            }
         }
     }
 

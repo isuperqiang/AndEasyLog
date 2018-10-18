@@ -4,12 +4,16 @@ import android.content.ClipData;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
@@ -19,13 +23,7 @@ import java.util.Set;
  * 日志工具类
  */
 class LogUtils {
-    /**
-     * Returns true if the string is null or 0-length.
-     * Copied from android.text.TextUtils.isEmpty.
-     *
-     * @param str the string to be examined
-     * @return true if str is null or zero length
-     */
+
     static boolean isEmpty(CharSequence str) {
         if (str == null || str.length() == 0) {
             return true;
@@ -34,7 +32,7 @@ class LogUtils {
         }
     }
 
-    public static String array2String(Object object) {
+    static String array2String(Object object) {
         if (object == null) {
             return "null";
         }
@@ -71,7 +69,7 @@ class LogUtils {
         return "Couldn't find a correct type for the object";
     }
 
-    public static String intent2String(Intent intent) {
+    static String intent2String(Intent intent) {
         StringBuilder sb = new StringBuilder(128);
         sb.append("Intent {");
         boolean first = true;
@@ -176,11 +174,11 @@ class LogUtils {
                 sb.append("}");
             }
         }
-        sb.append(" }");
+        sb.append(" } ");
         return sb.toString();
     }
 
-    public static String bundle2String(Bundle bundle) {
+    static String bundle2String(Bundle bundle) {
         Iterator<String> iterator = bundle.keySet().iterator();
         if (!iterator.hasNext()) {
             return "Bundle {}";
@@ -197,7 +195,7 @@ class LogUtils {
                 sb.append(value);
             }
             if (!iterator.hasNext()) {
-                return sb.append("}").toString();
+                return sb.append("} ").toString();
             }
             sb.append(',').append(' ');
         }
@@ -244,16 +242,53 @@ class LogUtils {
         sb.append("}");
     }
 
-    public static String getLogFileDir(Context context) {
+    static String getLogFileDir(Context context) {
         File defaultFileDir = getDefaultFileDir(context);
         return new File(defaultFileDir, "logger").getAbsolutePath();
     }
 
-    public static File getDefaultFileDir(Context context) {
+    private static File getDefaultFileDir(Context context) {
         File filesDir = context.getExternalFilesDir("");
         if (filesDir == null) {
             filesDir = context.getFilesDir();
         }
         return filesDir;
+    }
+
+    static void writeText2File(final File logFile, final String content) throws IOException {
+        BufferedWriter bufferedWriter = null;
+        try {
+            bufferedWriter = new BufferedWriter(new FileWriter(logFile, true));
+            bufferedWriter.write(content);
+        } finally {
+            if (bufferedWriter != null) {
+                bufferedWriter.close();
+            }
+        }
+    }
+
+    static String getDeviceInfo() {
+        String versionName = "";
+        int versionCode = 0;
+        Context context = LoggerFactory.getAppContext();
+        try {
+            PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            versionName = pi.versionName;
+            versionCode = pi.versionCode;
+        } catch (Throwable e) {
+            if (LoggerConfig.isLogcatEnabled()) {
+                e.printStackTrace();
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append("************* Log Head ****************");
+        sb.append("\nDevice Manufacturer: ").append(Build.MANUFACTURER)
+                .append("\nDevice Model       : ").append(Build.MODEL)
+                .append("\nAndroid Version    : ").append(Build.VERSION.RELEASE)
+                .append("\nAndroid SDK        : ").append(Build.VERSION.SDK_INT)
+                .append("\nApp VersionName    : ").append(versionName)
+                .append("\nApp VersionCode    : ").append(versionCode)
+                .append("\n************* Log Head ****************\n\n");
+        return sb.toString();
     }
 }
