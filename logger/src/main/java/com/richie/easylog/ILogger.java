@@ -77,16 +77,16 @@ public interface ILogger {
     void error(String message, Object... params);
 
     /**
-     * 格式化打印 Json
+     * 格式化打印 JSON
      *
-     * @param json Json 字符串
+     * @param json JSON 字符串
      */
     void json(String json);
 
     /**
-     * 格式化打印 Xml
+     * 格式化打印 XML
      *
-     * @param xml Xml 文本
+     * @param xml XML 文本
      */
     void xml(String xml);
 }

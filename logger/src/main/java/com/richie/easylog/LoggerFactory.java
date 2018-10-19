@@ -26,7 +26,7 @@ public final class LoggerFactory {
      */
     public static ILogger getLogger(String tag) {
         if (LoggerConfig.isLogcatEnabled() || LoggerConfig.isLogFileEnabled()) {
-            if (LogUtils.isEmpty(tag)) {
+            if (LoggerUtils.isEmpty(tag)) {
                 tag = DEFAULT_TAG;
             }
             ILogger logger = sLoggerMap.get(tag);
@@ -56,7 +56,7 @@ public final class LoggerFactory {
      * @return context
      */
     @SuppressLint("PrivateApi")
-    public static Context getAppContext() {
+    static Context getAppContext() {
         if (sAppContext == null) {
             try {
                 ClassLoader loader = Context.class.getClassLoader();

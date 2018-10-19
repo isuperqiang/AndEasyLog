@@ -107,10 +107,11 @@ class AndroidLogger implements ILogger {
 
     @Override
     public void json(String json) {
-        if (LogUtils.isEmpty(json)) {
+        if (LoggerUtils.isEmpty(json)) {
             debug("Empty/Null JSON content");
             return;
         }
+
         try {
             json = json.trim();
             StringBuilder sb = new StringBuilder();
@@ -137,10 +138,11 @@ class AndroidLogger implements ILogger {
 
     @Override
     public void xml(String xml) {
-        if (LogUtils.isEmpty(xml)) {
+        if (LoggerUtils.isEmpty(xml)) {
             debug("Empty/Null XML content");
             return;
         }
+
         try {
             Source xmlInput = new StreamSource(new StringReader(xml));
             StreamResult xmlOutput = new StreamResult(new StringWriter());
@@ -157,7 +159,7 @@ class AndroidLogger implements ILogger {
     private void log(int level, String tag, String message, Throwable throwable, Object... params) {
         String header = createLogHeader();
         String body = createLogBody(message, params);
-        if (LogUtils.isEmpty(body)) {
+        if (LoggerUtils.isEmpty(body)) {
             body = "Empty/Null log message";
         }
         processLog(level, tag, header, body, throwable);
@@ -189,11 +191,11 @@ class AndroidLogger implements ILogger {
                 if (j != -1) {
                     sb.append(message, index, j);
                     if (param.getClass().isArray()) {
-                        sb.append(LogUtils.array2String(param));
+                        sb.append(LoggerUtils.array2String(param));
                     } else if (param instanceof Intent) {
-                        sb.append(LogUtils.intent2String((Intent) param));
+                        sb.append(LoggerUtils.intent2String((Intent) param));
                     } else if (param instanceof Bundle) {
-                        sb.append(LogUtils.bundle2String((Bundle) param));
+                        sb.append(LoggerUtils.bundle2String((Bundle) param));
                     } else {
                         sb.append(param);
                     }
@@ -299,6 +301,7 @@ class AndroidLogger implements ILogger {
                 sExecutor = Executors.newSingleThreadExecutor();
             }
         }
+
         sExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -306,7 +309,7 @@ class AndroidLogger implements ILogger {
                 File file = createLogFile();
                 if (file != null) {
                     try {
-                        LogUtils.writeText2File(file, logContent);
+                        LoggerUtils.writeText2File(file, logContent);
                     } catch (IOException e) {
                         if (LoggerConfig.isLogcatEnabled()) {
                             e.printStackTrace();
@@ -334,8 +337,8 @@ class AndroidLogger implements ILogger {
     }
 
     private File createLogFile() {
-        if (LogUtils.isEmpty(LoggerConfig.getLogFileDir())) {
-            LoggerConfig.setLogFileConfig(true, LogUtils.getLogFileDir(LoggerFactory.getAppContext()));
+        if (LoggerUtils.isEmpty(LoggerConfig.getLogFileDir())) {
+            LoggerConfig.setLogFileDir(LoggerUtils.getLogFileDir(LoggerFactory.getAppContext()));
         }
 
         File logDir = new File(LoggerConfig.getLogFileDir());
@@ -345,17 +348,18 @@ class AndroidLogger implements ILogger {
                 return null;
             }
         }
-        if (LogUtils.isEmpty(sLogFileName)) {
+        if (LoggerUtils.isEmpty(sLogFileName)) {
             sLogFileName = new SimpleDateFormat("yyyyMMdd_HHmmss",
                     Locale.getDefault()).format(new Date()) + ".log";
         }
+
         File logFile = new File(logDir, sLogFileName);
         if (!logFile.exists()) {
             try {
                 boolean ret = logFile.createNewFile();
                 if (ret) {
-                    String deviceInfo = LogUtils.getDeviceInfo();
-                    LogUtils.writeText2File(logFile, deviceInfo);
+                    String deviceInfo = LoggerUtils.getDeviceInfo();
+                    LoggerUtils.writeText2File(logFile, deviceInfo);
                 }
                 return ret ? logFile : null;
             } catch (IOException e) {

@@ -12,6 +12,7 @@ public final class LogConfig {
     }
 
     public static void setLogFileConfig(boolean logFileEnabled, String logFileDir) {
-        LoggerConfig.setLogFileConfig(logFileEnabled, logFileDir);
+        LoggerConfig.setLogFileEnabled(logFileEnabled);
+        LoggerConfig.setLogFileDir(logFileDir);
     }
 }

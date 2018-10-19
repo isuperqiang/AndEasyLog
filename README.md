@@ -19,7 +19,7 @@
 
 ```
     dependencies {
-        implementation 'com.github.isuperqiang:AndEasyLog:1.5.2'
+        implementation 'com.github.isuperqiang:AndEasyLog:1.5.4'
     }
 ```
 
@@ -35,14 +35,14 @@
 ### 使用：
 1. **开关配置**：
 
-> 在程序入口（一般是 Application）的 onCreate 方法中，配置全局日志的开关。
+> 在 Application 的 onCreate 方法中，配置全局日志的开关。默认开启 Logcat 打印，关闭文件打印。
 
 ```java
     /*打开 logcat 日志*/
     LoggerConfig.setLogcatEnabled(true);
 
     /*打开 文件 日志*/
-    LoggerConfig.setLogFileConfig(true, dir);
+    LoggerConfig.setLogFileEnabled(true);
 ```
 
 2. **初始化**：

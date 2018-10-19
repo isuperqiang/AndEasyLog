@@ -6,15 +6,15 @@ package com.richie.easylog;
  */
 public final class LoggerConfig {
     /**
-     * Logcat 日志开关
+     * Logcat 日志开关，默认打开
      */
-    private static boolean sLogcatEnabled = false;
+    private static boolean sLogcatEnabled = true;
     /**
-     * 文件日志开关
+     * 文件日志开关，默认关闭
      */
     private static boolean sLogFileEnabled = false;
     /**
-     * 日志文件保存的目录
+     * 日志文件保存的目录，默认存放外置 cache 目录下
      */
     private static String sLogFileDir;
 
@@ -34,8 +34,11 @@ public final class LoggerConfig {
         return sLogFileDir;
     }
 
-    public static void setLogFileConfig(boolean logFileEnabled, String logFileDir) {
+    public static void setLogFileEnabled(boolean logFileEnabled) {
         sLogFileEnabled = logFileEnabled;
+    }
+
+    public static void setLogFileDir(String logFileDir) {
         sLogFileDir = logFileDir;
     }
 }

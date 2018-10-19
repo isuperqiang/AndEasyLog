@@ -22,7 +22,7 @@ import java.util.Set;
  * @author Richie
  * 日志工具类
  */
-class LogUtils {
+class LoggerUtils {
 
     static boolean isEmpty(CharSequence str) {
         if (str == null || str.length() == 0) {
@@ -248,9 +248,9 @@ class LogUtils {
     }
 
     private static File getDefaultFileDir(Context context) {
-        File filesDir = context.getExternalFilesDir("");
+        File filesDir = context.getExternalCacheDir();
         if (filesDir == null) {
-            filesDir = context.getFilesDir();
+            filesDir = context.getCacheDir();
         }
         return filesDir;
     }
@@ -270,8 +270,8 @@ class LogUtils {
     static String getDeviceInfo() {
         String versionName = "";
         int versionCode = 0;
-        Context context = LoggerFactory.getAppContext();
         try {
+            Context context = LoggerFactory.getAppContext();
             PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
             versionName = pi.versionName;
             versionCode = pi.versionCode;
