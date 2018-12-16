@@ -1,8 +1,8 @@
 package com.easy.log.test;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.richie.easylog.ILogger;
 import com.richie.easylog.LoggerFactory;
@@ -10,7 +10,7 @@ import com.richie.easylog.LoggerFactory;
 /**
  * @author Richie
  */
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
     private final ILogger logger = LoggerFactory.getLogger(MainActivity.class);
 
     @Override

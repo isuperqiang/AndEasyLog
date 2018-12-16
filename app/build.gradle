@@ -1,15 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
 
     defaultConfig {
         applicationId "com.easy.log.test"
         minSdkVersion 16
-        targetSdkVersion 27
-        versionCode 110
-        versionName "1.1.0"
+        targetSdkVersion 28
+        versionCode 120
+        versionName "1.2.0"
     }
 
     buildTypes {
@@ -22,5 +21,6 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation project(':logger')
 }

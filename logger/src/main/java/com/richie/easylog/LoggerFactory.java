@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class LoggerFactory {
     private static final String DEFAULT_TAG = "logger";
     private static ILogger sEmptyLogger = new EmptyLogger();
-    private static Map<String, ILogger> sLoggerMap = new ConcurrentHashMap<>();
+    private static Map<String, ILogger> sLoggerMap = new ConcurrentHashMap<>(128);
     private static Context sAppContext;
 
     /**
