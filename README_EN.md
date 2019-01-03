@@ -1,12 +1,14 @@
 # AndEasyLog
+
 [![](https://jitpack.io/v/isuperqiang/AndEasyLog.svg)](https://jitpack.io/#isuperqiang/AndEasyLog)
 
-一款简洁实用的 Android 日志库
+A concise and elegant Android log library.
 
-**README in [English](README_EN.md)**
+**README [中文](README.md)**
 
-### 添加依赖：
-第一步：在工程根目录 build.gradle 的 allprojects → repositories 下面添加 JitPack 仓库
+### Add dependency：
+
+First of all: Add the following code in build.gradle of root project, means that using JitPack repository.
 
 ```
     allprojects {
@@ -17,7 +19,7 @@
     }
 ```
 
-第二步：在模块 build.gradle 添加依赖
+Secondly: Add dependency in build.gradle of your module, means that compiling log liblary.
 
 ```
     dependencies {
@@ -25,41 +27,40 @@
     }
 ```
 
-### 特点：
-1. 支持 5 种日志打印级别：verbose、debug、info、warn、error
-2. 支持格式化打印 JSON 和 XML，可以直接打印数组、Intent 和 Bundle
-3. 支持打印当前线程名称和日志行号
-4. 支持设定日志 Tag，一般使用当前类名作为 Tag
-5. 支持打印无限长的日志，没有 4k 字符的限制
-6. 支持输出到文件，配置保存目录即可
-7. 导入 extra 文件夹下的 live-template-settings.jar，即可使用快捷输入
+### Features:
+1. Support 5 log levels, includes verbose, debug, info, warn and error.
+2. Print JSON and XML in pretty format, and print array, intent and bundle directly.
+3. Print thread name and line number in log header.
+4. Support customize log tag, we use class name generally.
+5. Support infinite log length, no 4K char limit.
+6. Support output to file, just config output dir.
+7. Import the live-template-settings.jar in project extra dir into your AS, then you could init logger in fast way.
 
-### 使用：
-1. **开关配置**：
+### Usage:
+1. **Switch**
 
-> 在 Application 的 onCreate 方法中，配置全局日志的开关。默认开启 Logcat 打印，关闭文件打印。
+> Config logger in Application's onCreate method.
 
 ```java
-    /*打开 logcat 日志*/
+    /*Turn logcat output on, defalut on*/
     LoggerConfig.setLogcatEnabled(true);
 
-    /*打开 文件 日志*/
+    /*Turn File output off, defalut off*/
     LoggerConfig.setLogFileEnabled(true);
 ```
+2. **Initialize**
 
-2. **初始化**：
-
-> 在每个类里面实例化 ILogger。
+> Instantiate logger in your class with tag.
 
 `private final ILogger logger = LoggerFactory.getLogger("MainActivity");`
 
-或者
+Or
 
 `private final ILogger logger = LoggerFactory.getLogger(MainActivity.class);`
 
-3. **打印日志**：
+3. **Print**
 
-> 多个参数时，建议使用占位符 {}，避免手动拼接长字符串。
+> When printing log with multi params, placeholder `{}` is recommend, avoiding concat string Manually.
 
 * `logger.debug("打印一段消息");`
 * `logger.debug("打印多个参数。String:{}, int:{}, long:{}, boolean:{}, char:{} etc.", "AndroidLog", 100, 1000L, false, 'c');`
@@ -69,19 +70,19 @@
 
   <img src='extra/log_snapshot.jpg'/>
 
-4. **日志说明**：
+4. **Log Explanation**：
 
->  \[线程名称\](方法行号) 消息内容
+>  \[Thread name\](Line number) messages
 
-5. **混淆规则**：
+5. **Proguard rules**：
 
->  没有限制，随便混淆
+>  No rules
 
-## 关于我
-* [博客](https://isuperqiang.cn)
-* [简书](http://www.jianshu.com/u/d5f18207fa2e)
+## About me
+* [Personal Blog](https://isuperqiang.cn)
+* [Jianshu Blog](http://www.jianshu.com/u/d5f18207fa2e)
 
-## 许可
+## License
 <pre>
 Copyright 2017 Richie Liu
 

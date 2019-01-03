@@ -3,6 +3,7 @@ package com.richie.easylog;
 /**
  * @author Richie
  * ILogger 空实现
+ * ILogger Null Object
  */
 class EmptyLogger implements ILogger {
 

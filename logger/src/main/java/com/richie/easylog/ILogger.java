@@ -3,11 +3,13 @@ package com.richie.easylog;
 /**
  * @author Richie
  * 日志接口
+ * Logger interface
  */
 public interface ILogger {
 
     /**
      * 啰嗦级别的输出
+     * verbose print
      *
      * @param message 消息
      * @param params  参数
@@ -16,6 +18,7 @@ public interface ILogger {
 
     /**
      * 调试级别的输出
+     * debug print
      *
      * @param message 消息
      * @param params  参数
@@ -24,6 +27,7 @@ public interface ILogger {
 
     /**
      * 信息级别的输出
+     * info print
      *
      * @param message 消息
      * @param params  参数
@@ -32,6 +36,7 @@ public interface ILogger {
 
     /**
      * 警告级别的输出
+     * warn print
      *
      * @param throwable 异常
      */
@@ -39,6 +44,7 @@ public interface ILogger {
 
     /**
      * 警告级别的输出
+     * warn print
      *
      * @param message   消息
      * @param throwable 异常
@@ -47,6 +53,7 @@ public interface ILogger {
 
     /**
      * 警告级别的输出
+     * warn print
      *
      * @param message 消息
      * @param params  参数
@@ -55,6 +62,7 @@ public interface ILogger {
 
     /**
      * 错误级别的输出
+     * error print
      *
      * @param throwable 异常
      */
@@ -62,6 +70,7 @@ public interface ILogger {
 
     /**
      * 错误级别的输出
+     * error print
      *
      * @param message   消息
      * @param throwable 异常
@@ -70,6 +79,7 @@ public interface ILogger {
 
     /**
      * 错误级别的输出
+     * error print
      *
      * @param message 消息
      * @param params  参数
@@ -78,6 +88,7 @@ public interface ILogger {
 
     /**
      * 格式化打印 JSON
+     * json format print
      *
      * @param json JSON 字符串
      */
@@ -85,6 +96,7 @@ public interface ILogger {
 
     /**
      * 格式化打印 XML
+     * xml format print
      *
      * @param xml XML 文本
      */

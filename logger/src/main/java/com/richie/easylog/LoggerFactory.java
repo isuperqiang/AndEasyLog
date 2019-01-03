@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author Richie
  * 日志工厂
+ * Logger factory
  */
 public final class LoggerFactory {
     private static final String DEFAULT_TAG = "logger";
@@ -20,6 +21,7 @@ public final class LoggerFactory {
 
     /**
      * 根据 tag 获取日志
+     * get logger by tag
      *
      * @param tag tag
      * @return log
@@ -42,6 +44,7 @@ public final class LoggerFactory {
 
     /**
      * 以类名为 tag 获取日志
+     * get logger by class name
      *
      * @param clazz 类名
      * @return log
@@ -52,6 +55,7 @@ public final class LoggerFactory {
 
     /**
      * 获取 Application Context
+     * get application context
      *
      * @return context
      */
