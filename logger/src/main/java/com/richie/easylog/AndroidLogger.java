@@ -27,30 +27,37 @@ import javax.xml.transform.stream.StreamSource;
 /**
  * @author Richie
  * Android 日志打印
+ * Android logger
  */
 class AndroidLogger implements ILogger {
     /**
      * Json 字符缩进距离
+     * Json indentation
      */
     private static final int JSON_INDENT = 2;
     /**
      * 参数占位符
+     * param placeholder
      */
     private static final String PARAMS_PLACEHOLDER = "{}";
     /**
      * 单条打印最大长度
+     * log message max length
      */
     private static final int MESSAGE_MAX_LENGTH = 4000;
     /**
      * 添加到日志文件的分割线
+     * log divider
      */
     private static final String SEPARATOR = " || ";
     /**
      * 日志文件的名称，应用运行期间，保存到同一个文件
+     * file name of cache log
      */
     private static String sLogFileName;
     /**
      * 写文件的线程池
+     * thread pool to write file
      */
     private static Executor sExecutor;
 

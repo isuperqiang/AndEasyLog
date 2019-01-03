@@ -13,12 +13,12 @@ public final class LoggerConfig {
     private static boolean sLogcatEnabled = true;
     /**
      * 文件日志开关，默认关闭
-     * Output Log to file, default false
+     * Output to file, default false
      */
     private static boolean sLogFileEnabled = false;
     /**
      * 日志文件保存的目录，默认存放外置 cache 目录下
-     * Dir to save log file, default app external cache dir.
+     * Directory to cache log file, default in app external cache dir.
      */
     private static String sLogFileDir;
 
