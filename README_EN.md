@@ -23,7 +23,7 @@ Secondly: Add dependency in build.gradle of your module, means that compiling lo
 
 ```
     dependencies {
-        implementation 'com.github.isuperqiang:AndEasyLog:1.5.8'
+        implementation 'com.github.isuperqiang:AndEasyLog:1.6.0'
     }
 ```
 

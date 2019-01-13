@@ -30,6 +30,7 @@ import javax.xml.transform.stream.StreamSource;
  * Android logger
  */
 class AndroidLogger implements ILogger {
+    private static final String TAG = "AndroidLogger";
     /**
      * Json 字符缩进距离
      * Json indentation
@@ -44,7 +45,7 @@ class AndroidLogger implements ILogger {
      * 单条打印最大长度
      * log message max length
      */
-    private static final int MESSAGE_MAX_LENGTH = 4000;
+    private static final int MESSAGE_MAX_LENGTH = 1024;
     /**
      * 添加到日志文件的分割线
      * log divider
@@ -183,41 +184,50 @@ class AndroidLogger implements ILogger {
 
     private String createLogBody(String message, Object[] params) {
         if (message == null) {
-            if (params.length != 0) {
+            if (params != null && params.length != 0) {
                 return "Log format error";
             } else {
-                return "";
+                return "Null";
             }
         }
 
         try {
             StringBuilder sb = new StringBuilder();
             int index = 0;
-            for (Object param : params) {
-                int j = message.indexOf(PARAMS_PLACEHOLDER, index);
-                if (j != -1) {
-                    sb.append(message, index, j);
-                    if (param.getClass().isArray()) {
-                        sb.append(LoggerUtils.array2String(param));
-                    } else if (param instanceof Intent) {
-                        sb.append(LoggerUtils.intent2String((Intent) param));
-                    } else if (param instanceof Bundle) {
-                        sb.append(LoggerUtils.bundle2String((Bundle) param));
+            if (params != null) {
+                for (Object param : params) {
+                    int j = message.indexOf(PARAMS_PLACEHOLDER, index);
+                    if (j != -1) {
+                        sb.append(message, index, j);
+                        if (param != null) {
+                            if (param.getClass().isArray()) {
+                                sb.append(LoggerUtils.array2String(param));
+                            } else if (param instanceof Intent) {
+                                sb.append(LoggerUtils.intent2String((Intent) param));
+                            } else if (param instanceof Bundle) {
+                                sb.append(LoggerUtils.bundle2String((Bundle) param));
+                            } else {
+                                sb.append(param);
+                            }
+                        } else {
+                            sb.append("null");
+                        }
+                        index = j + 2;
                     } else {
-                        sb.append(param);
+                        break;
                     }
-                    index = j + 2;
-                } else {
-                    break;
                 }
+                sb.append(message, index, message.length());
+            } else {
+                String s = message.replace(PARAMS_PLACEHOLDER, "null");
+                sb.append(s);
             }
-            sb.append(message, index, message.length());
             return sb.toString();
         } catch (Throwable e) {
             if (LoggerConfig.isLogcatEnabled()) {
-                e.printStackTrace();
+                Log.e(TAG, "createLogBody", e);
             }
-            return "";
+            return message;
         }
     }
 
@@ -238,7 +248,7 @@ class AndroidLogger implements ILogger {
             }
         } catch (Throwable e) {
             if (LoggerConfig.isLogcatEnabled()) {
-                e.printStackTrace();
+                Log.e(TAG, "getLineNumber", e);
             }
         }
         return 0;
@@ -261,12 +271,11 @@ class AndroidLogger implements ILogger {
                         subBody = body.substring(index, index + MESSAGE_MAX_LENGTH);
                     }
                     index += MESSAGE_MAX_LENGTH;
-                    printLog(level, tag, head + "********(" + count +
-                            ")********" + subBody, throwable);
+                    printLog(level, tag, head + "********(" + count + ")********" + subBody, throwable);
                 }
             } catch (Throwable e) {
                 if (LoggerConfig.isLogcatEnabled()) {
-                    e.printStackTrace();
+                    Log.e(TAG, "processLog", e);
                 }
             }
         }
@@ -319,7 +328,7 @@ class AndroidLogger implements ILogger {
                         LoggerUtils.writeText2File(file, logContent);
                     } catch (IOException e) {
                         if (LoggerConfig.isLogcatEnabled()) {
-                            e.printStackTrace();
+                            Log.e(TAG, "printLogFile", e);
                         }
                     }
                 }
@@ -371,7 +380,7 @@ class AndroidLogger implements ILogger {
                 return ret ? logFile : null;
             } catch (IOException e) {
                 if (LoggerConfig.isLogcatEnabled()) {
-                    e.printStackTrace();
+                    Log.e(TAG, "createLogFile", e);
                 }
                 return null;
             }
