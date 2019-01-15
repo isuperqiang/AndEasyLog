@@ -224,7 +224,7 @@ class AndroidLogger implements ILogger {
             }
             return sb.toString();
         } catch (Throwable e) {
-            if (LoggerConfig.isLogcatEnabled()) {
+            if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
                 Log.e(TAG, "createLogBody", e);
             }
             return message;
@@ -247,7 +247,7 @@ class AndroidLogger implements ILogger {
                 }
             }
         } catch (Throwable e) {
-            if (LoggerConfig.isLogcatEnabled()) {
+            if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
                 Log.e(TAG, "getLineNumber", e);
             }
         }
@@ -274,7 +274,7 @@ class AndroidLogger implements ILogger {
                     printLog(level, tag, head + "********(" + count + ")********" + subBody, throwable);
                 }
             } catch (Throwable e) {
-                if (LoggerConfig.isLogcatEnabled()) {
+                if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
                     Log.e(TAG, "processLog", e);
                 }
             }
@@ -282,10 +282,10 @@ class AndroidLogger implements ILogger {
     }
 
     private void printLog(int level, String tag, String message, Throwable throwable) {
-        if (LoggerConfig.isLogcatEnabled()) {
+        if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
             printLogcat(level, tag, message, throwable);
         }
-        if (LoggerConfig.isLogFileEnabled()) {
+        if (LoggerFactory.getLoggerConfig().isLogFileEnabled()) {
             printLogFile(tag, message, throwable);
         }
     }
@@ -327,7 +327,7 @@ class AndroidLogger implements ILogger {
                     try {
                         LoggerUtils.writeText2File(file, logContent);
                     } catch (IOException e) {
-                        if (LoggerConfig.isLogcatEnabled()) {
+                        if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
                             Log.e(TAG, "printLogFile", e);
                         }
                     }
@@ -353,11 +353,11 @@ class AndroidLogger implements ILogger {
     }
 
     private File createLogFile() {
-        if (LoggerUtils.isEmpty(LoggerConfig.getLogFileDir())) {
-            LoggerConfig.setLogFileDir(LoggerUtils.getLogFileDir(LoggerFactory.getAppContext()));
+        if (LoggerUtils.isEmpty(LoggerFactory.getLoggerConfig().getLogFileDir())) {
+            LoggerFactory.getLoggerConfig().setLogFileDir(LoggerUtils.getLogFileDir(LoggerFactory.getLoggerConfig().getContext()));
         }
 
-        File logDir = new File(LoggerConfig.getLogFileDir());
+        File logDir = new File(LoggerFactory.getLoggerConfig().getLogFileDir());
         if (!logDir.exists()) {
             boolean mkdirs = logDir.mkdirs();
             if (!mkdirs) {
@@ -379,7 +379,7 @@ class AndroidLogger implements ILogger {
                 }
                 return ret ? logFile : null;
             } catch (IOException e) {
-                if (LoggerConfig.isLogcatEnabled()) {
+                if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
                     Log.e(TAG, "createLogFile", e);
                 }
                 return null;

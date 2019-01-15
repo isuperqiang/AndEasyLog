@@ -3,6 +3,7 @@ package com.richie.easylog;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -17,7 +18,13 @@ public final class LoggerFactory {
     private static final String DEFAULT_TAG = "logger";
     private static ILogger sEmptyLogger = new EmptyLogger();
     private static Map<String, ILogger> sLoggerMap = new ConcurrentHashMap<>(128);
+    @Deprecated // use normal application context instead
     private static Context sAppContext;
+    private static LoggerConfig sLoggerConfig;
+
+    public static void init(LoggerConfig loggerConfig) {
+        sLoggerConfig = loggerConfig;
+    }
 
     /**
      * 根据 tag 获取日志
@@ -27,7 +34,7 @@ public final class LoggerFactory {
      * @return log
      */
     public static ILogger getLogger(String tag) {
-        if (LoggerConfig.isLogcatEnabled() || LoggerConfig.isLogFileEnabled()) {
+        if (sLoggerConfig.isLogcatEnabled() || sLoggerConfig.isLogFileEnabled()) {
             if (LoggerUtils.isEmpty(tag)) {
                 tag = DEFAULT_TAG;
             }
@@ -60,6 +67,7 @@ public final class LoggerFactory {
      * @return context
      */
     @SuppressLint("PrivateApi")
+    @Deprecated
     static Context getAppContext() {
         if (sAppContext == null) {
             try {
@@ -73,11 +81,15 @@ public final class LoggerFactory {
                 Application application = (Application) getApplicationM.invoke(currentActivityThread);
                 sAppContext = application.getApplicationContext();
             } catch (Throwable e) {
-                if (LoggerConfig.isLogcatEnabled()) {
-                    e.printStackTrace();
+                if (sLoggerConfig.isLogcatEnabled()) {
+                    Log.e("LoggerFactory", "getAppContext", e);
                 }
             }
         }
         return sAppContext;
+    }
+
+    public static LoggerConfig getLoggerConfig() {
+        return sLoggerConfig;
     }
 }

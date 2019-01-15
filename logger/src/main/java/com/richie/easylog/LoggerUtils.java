@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -272,13 +273,13 @@ class LoggerUtils {
         String versionName = "";
         int versionCode = 0;
         try {
-            Context context = LoggerFactory.getAppContext();
+            Context context = LoggerFactory.getLoggerConfig().getContext();
             PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
             versionName = pi.versionName;
             versionCode = pi.versionCode;
         } catch (Throwable e) {
-            if (LoggerConfig.isLogcatEnabled()) {
-                e.printStackTrace();
+            if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
+                Log.e("LoggerUtils", "", e);
             }
         }
         StringBuilder sb = new StringBuilder();
