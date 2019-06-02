@@ -20,11 +20,12 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * @author Richie
  * 日志工具类
  * Logger utils
+ *
+ * @author Richie
  */
-class LoggerUtils {
+final class LoggerUtils {
 
     static boolean isEmpty(CharSequence str) {
         if (str == null || str.length() == 0) {
@@ -176,7 +177,7 @@ class LoggerUtils {
                 sb.append("}");
             }
         }
-        sb.append(" } ");
+        sb.append("}");
         return sb.toString();
     }
 
@@ -197,7 +198,7 @@ class LoggerUtils {
                 sb.append(value);
             }
             if (!iterator.hasNext()) {
-                return sb.append("} ").toString();
+                return sb.append("}").toString();
             }
             sb.append(',').append(' ');
         }
@@ -244,17 +245,24 @@ class LoggerUtils {
         sb.append("}");
     }
 
-    static String getLogFileDir(Context context) {
-        File defaultFileDir = getDefaultFileDir(context);
-        return new File(defaultFileDir, "logger").getAbsolutePath();
+    static File getLogFileDir(Context context) {
+        File cacheDir = getCacheDir(context);
+        File logDir = new File(cacheDir, "logger");
+        if (!logDir.exists()) {
+            logDir.mkdirs();
+        }
+        return logDir;
     }
 
-    private static File getDefaultFileDir(Context context) {
-        File filesDir = context.getExternalCacheDir();
-        if (filesDir == null) {
-            filesDir = context.getCacheDir();
+    private static File getCacheDir(Context context) {
+        File cacheDir = context.getExternalCacheDir();
+        if (cacheDir == null) {
+            cacheDir = context.getCacheDir();
         }
-        return filesDir;
+        if (!cacheDir.exists()) {
+            cacheDir.mkdirs();
+        }
+        return cacheDir;
     }
 
     static void writeText2File(final File logFile, final String content) throws IOException {
@@ -262,9 +270,51 @@ class LoggerUtils {
         try {
             bufferedWriter = new BufferedWriter(new FileWriter(logFile, true));
             bufferedWriter.write(content);
+            bufferedWriter.flush();
         } finally {
             if (bufferedWriter != null) {
                 bufferedWriter.close();
+            }
+        }
+    }
+
+    static boolean checkDiskSize(Context context, long maxFolderSize) {
+        File logFileDir = getLogFileDir(context);
+        long folderSize = getFolderSize(logFileDir);
+        if (folderSize >= maxFolderSize) {
+            deleteFileRecursive(logFileDir);
+            return true;
+        }
+        return false;
+    }
+
+    private static long getFolderSize(File folder) {
+        File[] files = folder.listFiles();
+        if (files == null) {
+            return 0;
+        }
+        long length = 0;
+        for (File file : files) {
+            if (file.isFile()) {
+                length += file.length();
+            } else {
+                length += getFolderSize(file);
+            }
+        }
+        return length;
+    }
+
+    private static void deleteFileRecursive(File file) {
+        if (file.exists()) {
+            if (file.isDirectory()) {
+                File[] files = file.listFiles();
+                if (files != null) {
+                    for (File f : files) {
+                        deleteFileRecursive(f);
+                    }
+                }
+            } else {
+                file.delete();
             }
         }
     }
@@ -277,7 +327,7 @@ class LoggerUtils {
             PackageInfo pi = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
             versionName = pi.versionName;
             versionCode = pi.versionCode;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
                 Log.e("LoggerUtils", "", e);
             }

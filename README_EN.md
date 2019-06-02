@@ -23,7 +23,7 @@ Secondly: Add dependency in build.gradle of your module, means that compiling lo
 
 ```
     dependencies {
-        implementation 'com.github.isuperqiang:AndEasyLog:1.6.0'
+        implementation 'com.github.isuperqiang:AndEasyLog:1.7.0'
     }
 ```
 
@@ -43,10 +43,12 @@ Secondly: Add dependency in build.gradle of your module, means that compiling lo
 
 ```java
     /*Turn logcat output on, defalut on*/
-    LoggerConfig.setLogcatEnabled(true);
-
     /*Turn File output off, defalut off*/
-    LoggerConfig.setLogFileEnabled(true);
+        LoggerFactory.init(new LoggerConfig.Builder()
+                .context(this)
+                .logcatEnabled(true)
+                .logFileEnabled(true)
+                .build());
 ```
 2. **Initialize**
 
@@ -80,7 +82,6 @@ Or
 
 ## About me
 * [Personal Blog](https://isuperqiang.cn)
-* [Jianshu Blog](http://www.jianshu.com/u/d5f18207fa2e)
 
 ## License
 <pre>

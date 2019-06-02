@@ -25,11 +25,12 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 /**
- * @author Richie
  * Android 日志打印
  * Android logger
+ *
+ * @author Richie
  */
-class AndroidLogger implements ILogger {
+final class AndroidLogger implements ILogger {
     private static final String TAG = "AndroidLogger";
     /**
      * Json 字符缩进距离
@@ -57,7 +58,7 @@ class AndroidLogger implements ILogger {
      */
     private static String sLogFileName;
     /**
-     * 写文件的线程池
+     * 写文件的单线程池
      * thread pool to write file
      */
     private static Executor sExecutor;
@@ -139,7 +140,7 @@ class AndroidLogger implements ILogger {
                 sb.append("Invalid JSON:\n").append(json);
             }
             debug(sb.toString());
-        } catch (Throwable e) {
+        } catch (Exception e) {
             warn("Invalid JSON", e);
         }
     }
@@ -159,7 +160,7 @@ class AndroidLogger implements ILogger {
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
             transformer.transform(xmlInput, xmlOutput);
             debug("XML:\n" + (xmlOutput.getWriter().toString().replaceFirst(">", ">\n")));
-        } catch (Throwable e) {
+        } catch (Exception e) {
             warn("Invalid XML", e);
         }
     }
@@ -223,7 +224,7 @@ class AndroidLogger implements ILogger {
                 sb.append(s);
             }
             return sb.toString();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
                 Log.e(TAG, "createLogBody", e);
             }
@@ -246,7 +247,7 @@ class AndroidLogger implements ILogger {
                     }
                 }
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
                 Log.e(TAG, "getLineNumber", e);
             }
@@ -273,7 +274,7 @@ class AndroidLogger implements ILogger {
                     index += MESSAGE_MAX_LENGTH;
                     printLog(level, tag, head + "********(" + count + ")********" + subBody, throwable);
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
                     Log.e(TAG, "processLog", e);
                 }
@@ -338,8 +339,7 @@ class AndroidLogger implements ILogger {
 
     private String createLogContent(String tag, String message, Throwable throwable) {
         StringBuilder sb = new StringBuilder();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS",
-                Locale.getDefault());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.getDefault());
         sb.append("\n")
                 .append(simpleDateFormat.format(new Date()))
                 .append(SEPARATOR)
@@ -353,11 +353,13 @@ class AndroidLogger implements ILogger {
     }
 
     private File createLogFile() {
-        if (LoggerUtils.isEmpty(LoggerFactory.getLoggerConfig().getLogFileDir())) {
-            LoggerFactory.getLoggerConfig().setLogFileDir(LoggerUtils.getLogFileDir(LoggerFactory.getLoggerConfig().getContext()));
+        LoggerConfig loggerConfig = LoggerFactory.getLoggerConfig();
+        if (LoggerUtils.isEmpty(loggerConfig.getLogFileDir())) {
+            loggerConfig.setLogFileDir(LoggerUtils.getLogFileDir(
+                    loggerConfig.getContext()).getAbsolutePath());
         }
 
-        File logDir = new File(LoggerFactory.getLoggerConfig().getLogFileDir());
+        File logDir = new File(loggerConfig.getLogFileDir());
         if (!logDir.exists()) {
             boolean mkdirs = logDir.mkdirs();
             if (!mkdirs) {
@@ -365,12 +367,12 @@ class AndroidLogger implements ILogger {
             }
         }
         if (LoggerUtils.isEmpty(sLogFileName)) {
-            sLogFileName = new SimpleDateFormat("yyyyMMdd_HHmmss",
-                    Locale.getDefault()).format(new Date()) + ".log";
+            sLogFileName = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date()) + ".log";
         }
 
         File logFile = new File(logDir, sLogFileName);
         if (!logFile.exists()) {
+            LoggerUtils.checkDiskSize(loggerConfig.getContext(), loggerConfig.getMaxFilesSize());
             try {
                 boolean ret = logFile.createNewFile();
                 if (ret) {
@@ -379,7 +381,7 @@ class AndroidLogger implements ILogger {
                 }
                 return ret ? logFile : null;
             } catch (IOException e) {
-                if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
+                if (loggerConfig.isLogcatEnabled()) {
                     Log.e(TAG, "createLogFile", e);
                 }
                 return null;

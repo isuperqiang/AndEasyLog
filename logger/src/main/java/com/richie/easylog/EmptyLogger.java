@@ -1,11 +1,11 @@
 package com.richie.easylog;
 
 /**
- * @author Richie
  * ILogger 空实现
- * ILogger Null Object
+ *
+ * @author Richie
  */
-class EmptyLogger implements ILogger {
+final class EmptyLogger implements ILogger {
 
     @Override
     public void verbose(String message, Object... params) {

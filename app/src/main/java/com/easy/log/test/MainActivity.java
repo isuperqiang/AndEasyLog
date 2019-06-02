@@ -12,6 +12,7 @@ import com.richie.easylog.LoggerFactory;
  */
 public class MainActivity extends AppCompatActivity {
     private final ILogger logger = LoggerFactory.getLogger(MainActivity.class);
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

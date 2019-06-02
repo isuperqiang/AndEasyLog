@@ -1,9 +1,10 @@
 package com.richie.easylog;
 
 /**
- * @author Richie
  * 日志接口
  * Logger interface
+ *
+ * @author Richie
  */
 public interface ILogger {
 
@@ -88,7 +89,7 @@ public interface ILogger {
 
     /**
      * 格式化打印 JSON
-     * json format print
+     * JSON format print
      *
      * @param json JSON 字符串
      */
@@ -96,7 +97,7 @@ public interface ILogger {
 
     /**
      * 格式化打印 XML
-     * xml format print
+     * XML format print
      *
      * @param xml XML 文本
      */
