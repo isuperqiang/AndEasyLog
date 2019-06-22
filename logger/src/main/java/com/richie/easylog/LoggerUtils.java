@@ -15,17 +15,33 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Set;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * 日志工具类
  * Logger utils
  *
- * @author Richie
+ * @author Richie on 2018.01.10
  */
 final class LoggerUtils {
+    private static final String TAG = "LoggerUtils";
+    /**
+     * 写文件的单线程池
+     * thread pool to write file
+     */
+    private static Executor sExecutor;
+    /**
+     * 日志文件的名称，应用运行期间，保存到同一个文件
+     * file name of cache log
+     */
+    private static String sLogFileName;
 
     static boolean isEmpty(CharSequence str) {
         if (str == null || str.length() == 0) {
@@ -69,7 +85,7 @@ final class LoggerUtils {
         if (object instanceof Object[]) {
             return Arrays.deepToString((Object[]) object);
         }
-        return "Couldn't find a correct type for the object";
+        return "Couldn't find correct type for the object";
     }
 
     static String intent2String(Intent intent) {
@@ -245,6 +261,54 @@ final class LoggerUtils {
         sb.append("}");
     }
 
+    static void writeLogContent(final String content) {
+        synchronized (AndroidLogger.class) {
+            if (sExecutor == null) {
+                sExecutor = Executors.newSingleThreadExecutor();
+            }
+        }
+        sExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    File file = createLogFile();
+                    appendLogContent(file, content);
+                } catch (IOException e) {
+                    if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
+                        Log.e(TAG, "printLogFile", e);
+                    }
+                }
+            }
+        });
+    }
+
+    private static File createLogFile() throws IOException {
+        LoggerConfig loggerConfig = LoggerFactory.getLoggerConfig();
+        File logDir = new File(loggerConfig.getLogFileDir());
+        if (!logDir.exists()) {
+            boolean ret = logDir.mkdirs();
+            if (!ret) {
+                return null;
+            }
+        }
+        if (isEmpty(sLogFileName)) {
+            sLogFileName = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date()) + ".log";
+        }
+
+        File logFile = new File(logDir, sLogFileName);
+        if (!logFile.exists()) {
+            checkDiskSize(loggerConfig.getContext(), loggerConfig.getMaxFileSize());
+            boolean ret = logFile.createNewFile();
+            if (ret) {
+                String deviceInfo = getDeviceInfo();
+                appendLogContent(logFile, deviceInfo);
+            }
+            return ret ? logFile : null;
+        } else {
+            return logFile;
+        }
+    }
+
     static File getLogFileDir(Context context) {
         File cacheDir = getCacheDir(context);
         File logDir = new File(cacheDir, "logger");
@@ -265,7 +329,7 @@ final class LoggerUtils {
         return cacheDir;
     }
 
-    static void writeText2File(final File logFile, final String content) throws IOException {
+    static void appendLogContent(final File logFile, final String content) throws IOException {
         BufferedWriter bufferedWriter = null;
         try {
             bufferedWriter = new BufferedWriter(new FileWriter(logFile, true));
@@ -329,7 +393,7 @@ final class LoggerUtils {
             versionCode = pi.versionCode;
         } catch (Exception e) {
             if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
-                Log.e("LoggerUtils", "", e);
+                Log.e(TAG, "getPackageInfo", e);
             }
         }
         StringBuilder sb = new StringBuilder();

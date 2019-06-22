@@ -23,7 +23,7 @@ Secondly: Add dependency in build.gradle of your module, means that compiling lo
 
 ```
     dependencies {
-        implementation 'com.github.isuperqiang:AndEasyLog:1.7.0'
+        implementation 'com.github.isuperqiang:AndEasyLog:1.8.0'
     }
 ```
 
@@ -70,7 +70,7 @@ Or
 * `logger.xml("<?xml version=\"1.0\"?><note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>");`
 * `logger.warn(new NullPointerException("NPE"));`
 
-  <img src='extra/log_snapshot.jpg'/>
+<img src='extra/logcat_snapshot.jpg'/>
 
 4. **Log Explanation**：
 

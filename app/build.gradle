@@ -5,11 +5,11 @@ android {
     buildToolsVersion "28.0.3"
 
     defaultConfig {
-        applicationId "com.easy.log.test"
+        applicationId "cn.richie.easylog.test"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 130
-        versionName "1.3.0"
+        versionCode 140
+        versionName "1.4.0"
     }
 
     buildTypes {

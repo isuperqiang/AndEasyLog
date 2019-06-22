@@ -13,19 +13,19 @@ import java.util.concurrent.ConcurrentHashMap;
  * 日志工厂
  * Logger factory
  *
- * @author Richie
+ * @author Richie on 2018.01.10
  */
 public final class LoggerFactory {
     private static final String DEFAULT_TAG = "logger";
     private static ILogger sEmptyLogger = new EmptyLogger();
-    private static Map<String, ILogger> sLoggerMap = new ConcurrentHashMap<>(128);
+    private static Map<String, ILogger> sLoggerCache = new ConcurrentHashMap<>(128);
     @Deprecated // use normal application context instead
     private static Context sAppContext;
     private static LoggerConfig sLoggerConfig;
 
     public static void init(LoggerConfig loggerConfig) {
         if (loggerConfig == null) {
-            throw new NullPointerException("LoggerConfig cant't be NULL");
+            throw new NullPointerException("LoggerConfig can't be null");
         }
         sLoggerConfig = loggerConfig;
     }
@@ -39,16 +39,16 @@ public final class LoggerFactory {
      */
     public static ILogger getLogger(String tag) {
         if (sLoggerConfig == null) {
-            throw new IllegalStateException("LoggerConfig not initialized");
+            throw new IllegalStateException("LoggerConfig did't initialized");
         }
         if (sLoggerConfig.isLogcatEnabled() || sLoggerConfig.isLogFileEnabled()) {
             if (LoggerUtils.isEmpty(tag)) {
                 tag = DEFAULT_TAG;
             }
-            ILogger logger = sLoggerMap.get(tag);
+            ILogger logger = sLoggerCache.get(tag);
             if (logger == null) {
                 logger = new AndroidLogger(tag);
-                sLoggerMap.put(tag, logger);
+                sLoggerCache.put(tag, logger);
             }
             return logger;
         } else {
@@ -57,7 +57,7 @@ public final class LoggerFactory {
     }
 
     /**
-     * 以类名为 tag 获取日志
+     * 以类名为 Tag 获取日志
      * Get logger by class name
      *
      * @param clazz 类名

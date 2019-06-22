@@ -21,15 +21,18 @@ public final class LoggerConfig {
     private boolean mLogFileEnabled;
     /**
      * 日志文件保存的目录，默认存放外置 cache 目录下
-     * Directory to cache log file, default in app external cache dir
+     * Directory to cache log file, default is in app external cache dir
      */
     private String mLogFileDir;
     /**
      * 文件日志占用的最大空间
      * Max size of directory to cache log file
      */
-    private long mMaxFilesSize;
+    private long mMaxFileSize;
     private Context mContext;
+
+    LoggerConfig() {
+    }
 
     public boolean isLogcatEnabled() {
         return mLogcatEnabled;
@@ -51,15 +54,18 @@ public final class LoggerConfig {
         return mContext;
     }
 
-    public long getMaxFilesSize() {
-        return mMaxFilesSize;
+    public long getMaxFileSize() {
+        return mMaxFileSize;
     }
 
     public static class Builder {
-        private boolean mLogcatEnabled = true;
-        private boolean mLogFileEnabled;
-        // Default max size 10M
-        private long mMaxFilesSize = 10 * 1024 * 1024L;
+        /**
+         * Directory's default max size 10M
+         */
+        private static final long DEFAULT_DIRECTORY_SIZE = 10 * 1024 * 1024L;
+        private boolean mLogcatEnabled = false;
+        private boolean mLogFileEnabled = false;
+        private long mMaxFileSize = DEFAULT_DIRECTORY_SIZE;
         private String mLogFileDir;
         private Context mContext;
 
@@ -69,7 +75,13 @@ public final class LoggerConfig {
             loggerConfig.mLogcatEnabled = mLogcatEnabled;
             loggerConfig.mLogFileEnabled = mLogFileEnabled;
             loggerConfig.mLogFileDir = mLogFileDir;
-            loggerConfig.mMaxFilesSize = mMaxFilesSize;
+            loggerConfig.mMaxFileSize = mMaxFileSize;
+            if (mLogFileEnabled && LoggerUtils.isEmpty(mLogFileDir)) {
+                loggerConfig.mLogFileDir = LoggerUtils.getLogFileDir(mContext).getAbsolutePath();
+            }
+            if (mMaxFileSize <= 0) {
+                mMaxFileSize = DEFAULT_DIRECTORY_SIZE;
+            }
             return loggerConfig;
         }
 
@@ -93,11 +105,10 @@ public final class LoggerConfig {
             return this;
         }
 
-        public Builder maxFilesSize(long maxFilesSize) {
-            mMaxFilesSize = maxFilesSize;
+        public Builder maxFileSize(long maxFileSize) {
+            mMaxFileSize = maxFileSize;
             return this;
         }
-
     }
 
 }

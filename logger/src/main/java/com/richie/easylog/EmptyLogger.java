@@ -2,8 +2,9 @@ package com.richie.easylog;
 
 /**
  * ILogger 空实现
+ * ILogger empty implementation, do nothing.
  *
- * @author Richie
+ * @author Richie on 2018.01.10
  */
 final class EmptyLogger implements ILogger {
 

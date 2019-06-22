@@ -7,15 +7,11 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
@@ -28,15 +24,16 @@ import javax.xml.transform.stream.StreamSource;
  * Android 日志打印
  * Android logger
  *
- * @author Richie
+ * @author Richie on 2018.01.10
  */
 final class AndroidLogger implements ILogger {
     private static final String TAG = "AndroidLogger";
+
     /**
-     * Json 字符缩进距离
-     * Json indentation
+     * 日志标签
+     * Log tag
      */
-    private static final int JSON_INDENT = 2;
+    private final String tag;
     /**
      * 参数占位符
      * param placeholder
@@ -47,23 +44,6 @@ final class AndroidLogger implements ILogger {
      * log message max length
      */
     private static final int MESSAGE_MAX_LENGTH = 1024;
-    /**
-     * 添加到日志文件的分割线
-     * log divider
-     */
-    private static final String SEPARATOR = " || ";
-    /**
-     * 日志文件的名称，应用运行期间，保存到同一个文件
-     * file name of cache log
-     */
-    private static String sLogFileName;
-    /**
-     * 写文件的单线程池
-     * thread pool to write file
-     */
-    private static Executor sExecutor;
-
-    private final String tag;
 
     AndroidLogger(String tag) {
         this.tag = tag;
@@ -129,13 +109,13 @@ final class AndroidLogger implements ILogger {
                 sb.append("JSONObject length:")
                         .append(jsonObject.length())
                         .append("\n")
-                        .append(jsonObject.toString(JSON_INDENT));
+                        .append(jsonObject.toString(2));
             } else if (json.startsWith("[")) {
                 JSONArray jsonArray = new JSONArray(json);
                 sb.append("JSONArray length:")
                         .append(jsonArray.length())
                         .append("\n")
-                        .append(jsonArray.toString(JSON_INDENT));
+                        .append(jsonArray.toString(2));
             } else {
                 sb.append("Invalid JSON:\n").append(json);
             }
@@ -159,7 +139,7 @@ final class AndroidLogger implements ILogger {
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
             transformer.transform(xmlInput, xmlOutput);
-            debug("XML:\n" + (xmlOutput.getWriter().toString().replaceFirst(">", ">\n")));
+            debug("XML:\n" + xmlOutput.getWriter().toString().replaceFirst(">", ">\n"));
         } catch (Exception e) {
             warn("Invalid XML", e);
         }
@@ -313,28 +293,8 @@ final class AndroidLogger implements ILogger {
     }
 
     private void printLogFile(final String tag, final String message, final Throwable throwable) {
-        synchronized (AndroidLogger.class) {
-            if (sExecutor == null) {
-                sExecutor = Executors.newSingleThreadExecutor();
-            }
-        }
-
-        sExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                String logContent = createLogContent(tag, message, throwable);
-                File file = createLogFile();
-                if (file != null) {
-                    try {
-                        LoggerUtils.writeText2File(file, logContent);
-                    } catch (IOException e) {
-                        if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
-                            Log.e(TAG, "printLogFile", e);
-                        }
-                    }
-                }
-            }
-        });
+        String logContent = createLogContent(tag, message, throwable);
+        LoggerUtils.writeLogContent(logContent);
     }
 
     private String createLogContent(String tag, String message, Throwable throwable) {
@@ -342,53 +302,14 @@ final class AndroidLogger implements ILogger {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.getDefault());
         sb.append("\n")
                 .append(simpleDateFormat.format(new Date()))
-                .append(SEPARATOR)
+                .append(" || ")
                 .append(tag)
-                .append(SEPARATOR)
+                .append(" || ")
                 .append(message);
         if (throwable != null) {
-            sb.append(SEPARATOR).append(Log.getStackTraceString(throwable));
+            sb.append(" || ").append(Log.getStackTraceString(throwable));
         }
         return sb.toString();
-    }
-
-    private File createLogFile() {
-        LoggerConfig loggerConfig = LoggerFactory.getLoggerConfig();
-        if (LoggerUtils.isEmpty(loggerConfig.getLogFileDir())) {
-            loggerConfig.setLogFileDir(LoggerUtils.getLogFileDir(
-                    loggerConfig.getContext()).getAbsolutePath());
-        }
-
-        File logDir = new File(loggerConfig.getLogFileDir());
-        if (!logDir.exists()) {
-            boolean mkdirs = logDir.mkdirs();
-            if (!mkdirs) {
-                return null;
-            }
-        }
-        if (LoggerUtils.isEmpty(sLogFileName)) {
-            sLogFileName = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date()) + ".log";
-        }
-
-        File logFile = new File(logDir, sLogFileName);
-        if (!logFile.exists()) {
-            LoggerUtils.checkDiskSize(loggerConfig.getContext(), loggerConfig.getMaxFilesSize());
-            try {
-                boolean ret = logFile.createNewFile();
-                if (ret) {
-                    String deviceInfo = LoggerUtils.getDeviceInfo();
-                    LoggerUtils.writeText2File(logFile, deviceInfo);
-                }
-                return ret ? logFile : null;
-            } catch (IOException e) {
-                if (loggerConfig.isLogcatEnabled()) {
-                    Log.e(TAG, "createLogFile", e);
-                }
-                return null;
-            }
-        } else {
-            return logFile;
-        }
     }
 
     private void v(String tag, String message, Throwable t) {

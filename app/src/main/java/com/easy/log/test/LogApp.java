@@ -20,7 +20,7 @@ public class LogApp extends Application {
                 .context(this)
                 .logcatEnabled(true)
                 .logFileEnabled(true)
-                .maxFilesSize(1024 * 1024)
+                .maxFileSize(1024 * 1024)
                 .build());
     }
 }

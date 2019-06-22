@@ -8,11 +8,10 @@ import com.richie.easylog.ILogger;
 import com.richie.easylog.LoggerFactory;
 
 /**
- * @author Richie
+ * @author Richie on 2018.01.10
  */
 public class MainActivity extends AppCompatActivity {
     private final ILogger logger = LoggerFactory.getLogger(MainActivity.class);
-    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

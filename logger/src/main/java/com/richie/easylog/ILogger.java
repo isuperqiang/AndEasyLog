@@ -4,7 +4,7 @@ package com.richie.easylog;
  * 日志接口
  * Logger interface
  *
- * @author Richie
+ * @author Richie on 2018.01.10
  */
 public interface ILogger {
 
