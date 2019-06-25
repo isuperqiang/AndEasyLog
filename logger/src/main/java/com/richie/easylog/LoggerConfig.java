@@ -71,7 +71,7 @@ public final class LoggerConfig {
 
         public LoggerConfig build() {
             LoggerConfig loggerConfig = new LoggerConfig();
-            loggerConfig.mContext = mContext;
+            loggerConfig.mContext = mContext.getApplicationContext();
             loggerConfig.mLogcatEnabled = mLogcatEnabled;
             loggerConfig.mLogFileEnabled = mLogFileEnabled;
             loggerConfig.mLogFileDir = mLogFileDir;
