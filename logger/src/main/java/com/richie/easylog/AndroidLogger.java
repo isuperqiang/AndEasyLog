@@ -27,7 +27,6 @@ import javax.xml.transform.stream.StreamSource;
  * @author Richie on 2018.01.10
  */
 final class AndroidLogger implements ILogger {
-    private static final String TAG = "AndroidLogger";
     /**
      * 日志标签
      * Log tag
@@ -204,9 +203,7 @@ final class AndroidLogger implements ILogger {
             }
             return sb.toString();
         } catch (Exception e) {
-            if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
-                Log.e(TAG, "createLogBody", e);
-            }
+            Log.e(LoggerFactory.DEFAULT_TAG, "createLogBody", e);
             return message;
         }
     }
@@ -227,9 +224,7 @@ final class AndroidLogger implements ILogger {
                 }
             }
         } catch (Exception e) {
-            if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
-                Log.e(TAG, "getLineNumber", e);
-            }
+            Log.e(LoggerFactory.DEFAULT_TAG, "getLineNumber", e);
         }
         return 0;
     }
@@ -254,9 +249,7 @@ final class AndroidLogger implements ILogger {
                     printLog(level, tag, head + "********(" + count + ")********" + subBody, throwable);
                 }
             } catch (Exception e) {
-                if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
-                    Log.e(TAG, "processLog", e);
-                }
+                Log.e(LoggerFactory.DEFAULT_TAG, "processLog", e);
             }
         }
     }

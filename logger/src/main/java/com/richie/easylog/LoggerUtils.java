@@ -31,7 +31,6 @@ import java.util.concurrent.Executors;
  * @author Richie on 2018.01.10
  */
 final class LoggerUtils {
-    private static final String TAG = "LoggerUtils";
     /**
      * 写文件的单线程池
      * thread pool to write file
@@ -275,9 +274,7 @@ final class LoggerUtils {
                     File file = createLogFile();
                     appendLogContent(file, content);
                 } catch (IOException e) {
-                    if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
-                        Log.e(TAG, "printLogFile", e);
-                    }
+                    Log.e(LoggerFactory.DEFAULT_TAG, "printLogFile", e);
                 }
             }
         });
@@ -392,9 +389,7 @@ final class LoggerUtils {
             versionName = pi.versionName;
             versionCode = pi.versionCode;
         } catch (Exception e) {
-            if (LoggerFactory.getLoggerConfig().isLogcatEnabled()) {
-                Log.e(TAG, "getPackageInfo", e);
-            }
+            Log.e(LoggerFactory.DEFAULT_TAG, "getPackageInfo", e);
         }
         StringBuilder sb = new StringBuilder();
         sb.append("************* Log Head ****************");

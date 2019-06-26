@@ -10,8 +10,13 @@ import android.content.Context;
  */
 public final class LoggerConfig {
     /**
-     * Logcat 日志开关，默认打开
-     * Logcat switch, default true
+     * Directory's default max size 10M
+     * 文件夹默认大小 10M
+     */
+    private static final long DEFAULT_DIRECTORY_SIZE = 10 * 1024 * 1024L;
+    /**
+     * Logcat 日志开关，默认关闭
+     * Logcat switch, default false
      */
     private boolean mLogcatEnabled;
     /**
@@ -46,10 +51,6 @@ public final class LoggerConfig {
         return mLogFileDir;
     }
 
-    public void setLogFileDir(String logFileDir) {
-        mLogFileDir = logFileDir;
-    }
-
     public Context getContext() {
         return mContext;
     }
@@ -59,10 +60,6 @@ public final class LoggerConfig {
     }
 
     public static class Builder {
-        /**
-         * Directory's default max size 10M
-         */
-        private static final long DEFAULT_DIRECTORY_SIZE = 10 * 1024 * 1024L;
         private boolean mLogcatEnabled = false;
         private boolean mLogFileEnabled = false;
         private long mMaxFileSize = DEFAULT_DIRECTORY_SIZE;

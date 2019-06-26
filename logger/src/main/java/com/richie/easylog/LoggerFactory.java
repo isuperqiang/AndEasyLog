@@ -10,9 +10,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Richie on 2018.01.10
  */
 public final class LoggerFactory {
-    private static final String DEFAULT_TAG = "logger";
-    private final static ILogger EMPTY_LOGGER = new EmptyLogger();
-    private final static Map<String, ILogger> LOGGER_CACHE = new ConcurrentHashMap<>(128);
+    static final String DEFAULT_TAG = "logger";
+    private static final ILogger EMPTY_LOGGER = new EmptyLogger();
+    private static final Map<String, ILogger> LOGGER_CACHE = new ConcurrentHashMap<>(128);
     private static LoggerConfig sLoggerConfig;
 
     public static void init(LoggerConfig loggerConfig) {
@@ -31,7 +31,7 @@ public final class LoggerFactory {
      */
     public static ILogger getLogger(String tag) {
         if (sLoggerConfig == null) {
-            throw new IllegalStateException("LoggerConfig did't initialized");
+            throw new IllegalStateException("LoggerConfig isn't initialized");
         }
         if (sLoggerConfig.isLogcatEnabled() || sLoggerConfig.isLogFileEnabled()) {
             if (LoggerUtils.isEmpty(tag)) {
@@ -62,7 +62,8 @@ public final class LoggerFactory {
         return getLogger(clazz.getSimpleName());
     }
 
-    static LoggerConfig getLoggerConfig() {
+    public static LoggerConfig getLoggerConfig() {
         return sLoggerConfig;
     }
+
 }
