@@ -28,7 +28,6 @@ import javax.xml.transform.stream.StreamSource;
  */
 final class AndroidLogger implements ILogger {
     private static final String TAG = "AndroidLogger";
-
     /**
      * 日志标签
      * Log tag

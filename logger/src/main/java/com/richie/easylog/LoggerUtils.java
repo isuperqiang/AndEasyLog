@@ -262,11 +262,12 @@ final class LoggerUtils {
     }
 
     static void writeLogContent(final String content) {
-        synchronized (AndroidLogger.class) {
+        synchronized (LoggerUtils.class) {
             if (sExecutor == null) {
                 sExecutor = Executors.newSingleThreadExecutor();
             }
         }
+
         sExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -291,6 +292,7 @@ final class LoggerUtils {
                 return null;
             }
         }
+
         if (isEmpty(sLogFileName)) {
             sLogFileName = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date()) + ".log";
         }
@@ -329,7 +331,7 @@ final class LoggerUtils {
         return cacheDir;
     }
 
-    static void appendLogContent(final File logFile, final String content) throws IOException {
+    private static void appendLogContent(final File logFile, final String content) throws IOException {
         BufferedWriter bufferedWriter = null;
         try {
             bufferedWriter = new BufferedWriter(new FileWriter(logFile, true));
@@ -342,14 +344,12 @@ final class LoggerUtils {
         }
     }
 
-    static boolean checkDiskSize(Context context, long maxFolderSize) {
+    private static void checkDiskSize(Context context, long maxFolderSize) {
         File logFileDir = getLogFileDir(context);
         long folderSize = getFolderSize(logFileDir);
         if (folderSize >= maxFolderSize) {
             deleteFileRecursive(logFileDir);
-            return true;
         }
-        return false;
     }
 
     private static long getFolderSize(File folder) {
@@ -383,7 +383,7 @@ final class LoggerUtils {
         }
     }
 
-    static String getDeviceInfo() {
+    private static String getDeviceInfo() {
         String versionName = "";
         int versionCode = 0;
         try {

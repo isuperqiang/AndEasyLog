@@ -11,8 +11,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class LoggerFactory {
     private static final String DEFAULT_TAG = "logger";
-    private static ILogger sEmptyLogger = new EmptyLogger();
-    private static Map<String, ILogger> sLoggerCache = new ConcurrentHashMap<>(128);
+    private final static ILogger EMPTY_LOGGER = new EmptyLogger();
+    private final static Map<String, ILogger> LOGGER_CACHE = new ConcurrentHashMap<>(128);
     private static LoggerConfig sLoggerConfig;
 
     public static void init(LoggerConfig loggerConfig) {
@@ -37,14 +37,14 @@ public final class LoggerFactory {
             if (LoggerUtils.isEmpty(tag)) {
                 tag = DEFAULT_TAG;
             }
-            ILogger logger = sLoggerCache.get(tag);
+            ILogger logger = LOGGER_CACHE.get(tag);
             if (logger == null) {
                 logger = new AndroidLogger(tag);
-                sLoggerCache.put(tag, logger);
+                LOGGER_CACHE.put(tag, logger);
             }
             return logger;
         } else {
-            return sEmptyLogger;
+            return EMPTY_LOGGER;
         }
     }
 
