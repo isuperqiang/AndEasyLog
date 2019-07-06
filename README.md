@@ -21,7 +21,7 @@
 
 ```
     dependencies {
-        implementation 'com.github.isuperqiang:AndEasyLog:1.8.0'
+        implementation 'com.github.isuperqiang:AndEasyLog:1.9.0'
     }
 ```
 

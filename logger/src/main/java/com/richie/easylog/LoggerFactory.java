@@ -1,6 +1,7 @@
 package com.richie.easylog;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 日志工厂
@@ -11,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class LoggerFactory {
     static final String DEFAULT_TAG = "logger";
     private static final ILogger EMPTY_LOGGER = new EmptyLogger();
-    private static final ConcurrentHashMap<String, ILogger> LOGGER_CACHE = new ConcurrentHashMap<>(128);
+    private static final Map<String, ILogger> LOGGER_CACHE = new HashMap<>(128);
     private static LoggerConfig sLoggerConfig;
 
     public static void init(LoggerConfig loggerConfig) {
@@ -39,7 +40,7 @@ public final class LoggerFactory {
             ILogger logger = LOGGER_CACHE.get(tag);
             if (logger == null) {
                 logger = new AndroidLogger(tag);
-                LOGGER_CACHE.putIfAbsent(tag, logger);
+                LOGGER_CACHE.put(tag, logger);
             }
             return logger;
         } else {

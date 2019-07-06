@@ -1,8 +1,8 @@
 package com.richie.easylog;
 
 /**
- * ILogger 空实现
- * ILogger empty implementation, do nothing.
+ * ILogger 空实现，什么也不做
+ * ILogger null implementation, do nothing.
  *
  * @author Richie on 2018.01.10
  */
@@ -54,13 +54,17 @@ final class EmptyLogger implements ILogger {
     }
 
     @Override
-    public void json(String json) {
-
+    public String json(String json) {
+        return null;
     }
 
     @Override
-    public void xml(String xml) {
-
+    public String xml(String xml) {
+        return null;
     }
 
+    @Override
+    public String stackTrack(Throwable throwable) {
+        return null;
+    }
 }

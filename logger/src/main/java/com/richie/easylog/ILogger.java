@@ -88,18 +88,29 @@ public interface ILogger {
     void error(String message, Object... params);
 
     /**
-     * 格式化打印 JSON
-     * JSON format print
+     * 格式化 JSON
+     * JSON format
      *
      * @param json JSON 字符串
+     * @return formatted json
      */
-    void json(String json);
+    String json(String json);
 
     /**
-     * 格式化打印 XML
-     * XML format print
+     * 格式化 XML
+     * XML format
      *
      * @param xml XML 文本
+     * @return formatted xml
      */
-    void xml(String xml);
+    String xml(String xml);
+
+    /**
+     * 获取异常堆栈的字符串表示
+     * Get a loggable stack trace from a Throwable
+     *
+     * @param throwable
+     * @return
+     */
+    String stackTrack(Throwable throwable);
 }

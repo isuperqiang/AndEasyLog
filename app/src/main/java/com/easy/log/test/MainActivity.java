@@ -40,11 +40,16 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("data", bundle);
         logger.debug("intent:{}", intent);
         logger.info("********************************");
-        logger.json("{\"上海\":[\"浦东\"],\"四川\":[\"成都\",\"攀枝花\"],\"福建\":[\"福州\",\"厦门\",\"泉州\"]}");
+        String json = logger.json("{\"上海\":[\"浦东\"],\"四川\":[\"成都\",\"攀枝花\"],\"福建\":[\"福州\",\"厦门\",\"泉州\"]}");
+        logger.debug(json);
         logger.info("********************************");
-        logger.xml("<?xml version=\"1.0\"?><note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>");
+        String xml = logger.xml("<?xml version=\"1.0\"?><note><to>Tove</to><from>Jani</from><heading>Reminder</heading><body>Don't forget me this weekend!</body></note>");
+        logger.debug(xml);
         logger.info("********************************");
-        logger.warn(new NullPointerException("NPE example"));
+        NullPointerException npe = new NullPointerException("NPE example");
+        logger.warn(npe);
+        String npeStackTrace = logger.stackTrack(npe);
+        logger.error("NPE StackTrace:{}", npeStackTrace);
 
         logger.info("********************************");
         String haiyan = "在苍茫的大海上，狂风卷集着乌云。在乌云和大海之间，海燕像黑色的闪电，在高傲的飞翔。一会儿翅膀碰着波浪，" +
