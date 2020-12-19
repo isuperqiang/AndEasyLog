@@ -5,12 +5,13 @@ group = 'com.github.isuperqiang'
 
 android {
     compileSdkVersion 28
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 190
-        versionName "1.9.0"
+        versionCode 200
+        versionName "2.0.0"
     }
 
     buildTypes {

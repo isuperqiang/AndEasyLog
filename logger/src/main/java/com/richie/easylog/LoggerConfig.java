@@ -1,6 +1,7 @@
 package com.richie.easylog;
 
 import android.content.Context;
+import android.util.Log;
 
 /**
  * 日志配置
@@ -35,6 +36,20 @@ public final class LoggerConfig {
      */
     private long mMaxFileSize;
     private Context mContext;
+    /**
+     * 日志级别，默认关闭
+     */
+    private int mLogLevel = DEBUG;
+
+    /**
+     * Log level
+     */
+    public static final int VERBOSE = Log.VERBOSE;
+    public static final int DEBUG = Log.DEBUG;
+    public static final int INFO = Log.INFO;
+    public static final int WARN = Log.WARN;
+    public static final int ERROR = Log.ERROR;
+    public static final int OFF = 7;
 
     LoggerConfig() {
     }
@@ -59,12 +74,17 @@ public final class LoggerConfig {
         return mMaxFileSize;
     }
 
+    public boolean isLoggable(int level) {
+        return level >= mLogLevel;
+    }
+
     public static class Builder {
         private boolean mLogcatEnabled = false;
         private boolean mLogFileEnabled = false;
         private long mMaxFileSize = DEFAULT_DIRECTORY_SIZE;
         private String mLogFileDir;
         private Context mContext;
+        private int mLogLevel = DEBUG;
 
         public LoggerConfig build() {
             LoggerConfig loggerConfig = new LoggerConfig();
@@ -73,6 +93,7 @@ public final class LoggerConfig {
             loggerConfig.mLogFileEnabled = mLogFileEnabled;
             loggerConfig.mLogFileDir = mLogFileDir;
             loggerConfig.mMaxFileSize = mMaxFileSize;
+            loggerConfig.mLogLevel = mLogLevel;
             if (mLogFileEnabled && LoggerUtils.isEmpty(mLogFileDir)) {
                 loggerConfig.mLogFileDir = LoggerUtils.getLogFileDir(mContext).getAbsolutePath();
             }
@@ -106,6 +127,10 @@ public final class LoggerConfig {
             mMaxFileSize = maxFileSize;
             return this;
         }
-    }
 
+        public Builder logLevel(int logLevel) {
+            mLogLevel = logLevel;
+            return this;
+        }
+    }
 }

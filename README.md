@@ -8,7 +8,7 @@
 ### 添加依赖：
 第一步：在工程根目录 build.gradle 的 allprojects → repositories 下面添加 JitPack 仓库
 
-```
+```groovy
     allprojects {
         repositories {
             ...
@@ -19,33 +19,36 @@
 
 第二步：在模块 build.gradle 添加依赖
 
-```
+```groovy
     dependencies {
-        implementation 'com.github.isuperqiang:AndEasyLog:1.9.0'
+        implementation 'com.github.isuperqiang:AndEasyLog:2.0.0'
     }
 ```
 
 ### 特点：
-1. 支持 5 种日志打印级别：verbose、debug、info、warn、error
-2. 支持格式化打印 JSON 和 XML，可以直接打印数组、Intent 和 Bundle
+1. 支持 5 种日志级别：verbose、debug、info、warn、error
+2. 支持格式化 JSON 和 XML，可以直接打印数组、Intent 和 Bundle
 3. 支持打印当前线程名称和日志行号
 4. 支持设定日志 Tag，一般使用当前类名作为 Tag
 5. 支持打印无限长的日志，没有 4k 字符的限制
-6. 支持输出到文件，配置保存目录即可
-7. 导入 extra 文件夹下的 live-template-settings.jar，即可使用快捷输入
+6. 支持日志输出到文件，配置保存目录即可
+7. 支持配置日志级别，方便过滤信息
+8. 导入 extra 文件夹下的 live-template-settings.jar，即可使用快捷输入
 
 ### 使用：
 1. **开关配置**：
 
-> 在 Application 的 onCreate 方法中，配置全局日志的开关。默认开启 Logcat 打印，关闭文件打印。
+> 在 Application 的 onCreate 方法中，配置全局日志的开关。默认开启 Logcat 打印，关闭文件打印，日志 debug 级别。
 
 ```java
         /*打开 logcat 日志*/
         /*打开 文件 日志*/
+        /*打开 Debug 日志*/
         LoggerFactory.init(new LoggerConfig.Builder()
                 .context(this)
                 .logcatEnabled(true)
                 .logFileEnabled(true)
+                .logLevel(LoggerConfig.VERBOSE)
                 .build());
 ```
 

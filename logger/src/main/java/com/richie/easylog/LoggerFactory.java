@@ -55,7 +55,7 @@ public final class LoggerFactory {
      * @param clazz 类名
      * @return log
      */
-    public static ILogger getLogger(Class clazz) {
+    public static ILogger getLogger(Class<?> clazz) {
         if (clazz == null) {
             clazz = Object.class;
         }

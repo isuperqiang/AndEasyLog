@@ -15,11 +15,13 @@ public class LogApp extends Application {
         super.onCreate();
         /*打开 logcat 日志*/
         /*打开 文件 日志*/
+        /*打开 Debug 日志*/
         /*最大文件缓存 10M*/
         LoggerFactory.init(new LoggerConfig.Builder()
                 .context(this)
                 .logcatEnabled(true)
                 .logFileEnabled(true)
+                .logLevel(LoggerConfig.VERBOSE)
                 .maxFileSize(1024 * 1024)
                 .build());
     }

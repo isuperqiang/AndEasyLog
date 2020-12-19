@@ -8,8 +8,8 @@ android {
         applicationId "cn.richie.easylog.test"
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 150
-        versionName "1.5.0"
+        versionCode 160
+        versionName "1.6.0"
     }
 
     buildTypes {
@@ -20,17 +20,13 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
-    }
-
-    lintOptions {
-        abortOnError false
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation project(':logger')
 }

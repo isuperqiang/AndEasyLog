@@ -1,7 +1,5 @@
 package com.richie.easylog;
 
-import android.util.Log;
-
 /**
  * Android 日志打印
  * Android logger
@@ -13,25 +11,25 @@ final class AndroidLogger implements ILogger {
      * 标签
      * Log tag
      */
-    private final String tag;
+    private final String mTag;
 
     AndroidLogger(String tag) {
-        this.tag = tag;
+        mTag = tag;
     }
 
     @Override
     public void verbose(String message, Object... params) {
-        LoggerUtils.log(Log.VERBOSE, tag, message, null, params);
+        LoggerUtils.log(LoggerConfig.VERBOSE, mTag, message, null, params);
     }
 
     @Override
     public void debug(String message, Object... params) {
-        LoggerUtils.log(Log.DEBUG, tag, message, null, params);
+        LoggerUtils.log(LoggerConfig.DEBUG, mTag, message, null, params);
     }
 
     @Override
     public void info(String message, Object... params) {
-        LoggerUtils.log(Log.INFO, tag, message, null, params);
+        LoggerUtils.log(LoggerConfig.INFO, mTag, message, null, params);
     }
 
     @Override
@@ -41,12 +39,12 @@ final class AndroidLogger implements ILogger {
 
     @Override
     public void warn(String message, Throwable throwable) {
-        LoggerUtils.log(Log.WARN, tag, message, throwable);
+        LoggerUtils.log(LoggerConfig.WARN, mTag, message, throwable);
     }
 
     @Override
     public void warn(String message, Object... params) {
-        LoggerUtils.log(Log.WARN, tag, message, null, params);
+        LoggerUtils.log(LoggerConfig.WARN, mTag, message, null, params);
     }
 
     @Override
@@ -56,12 +54,12 @@ final class AndroidLogger implements ILogger {
 
     @Override
     public void error(String message, Throwable throwable) {
-        LoggerUtils.log(Log.ERROR, tag, message, throwable);
+        LoggerUtils.log(LoggerConfig.ERROR, mTag, message, throwable);
     }
 
     @Override
     public void error(String message, Object... params) {
-        LoggerUtils.log(Log.ERROR, tag, message, null, params);
+        LoggerUtils.log(LoggerConfig.ERROR, mTag, message, null, params);
     }
 
     @Override

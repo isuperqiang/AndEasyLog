@@ -69,6 +69,9 @@ final class LoggerUtils {
     }
 
     static void log(int level, String tag, String message, Throwable throwable, Object... params) {
+        if (!LoggerFactory.getLoggerConfig().isLoggable(level)) {
+            return;
+        }
         String header = createLogHeader();
         String body = createLogBody(message, params);
         if (LoggerUtils.isEmpty(body)) {

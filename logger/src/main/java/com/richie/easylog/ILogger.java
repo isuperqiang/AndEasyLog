@@ -109,8 +109,8 @@ public interface ILogger {
      * 获取异常堆栈的字符串表示
      * Get a loggable stack trace from a Throwable
      *
-     * @param throwable
-     * @return
+     * @param throwable 异常
+     * @return stack string
      */
     String stackTrack(Throwable throwable);
 }

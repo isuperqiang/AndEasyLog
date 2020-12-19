@@ -10,7 +10,7 @@ A concise and elegant Android log library.
 
 First of all: Add the following code in build.gradle of root project, means that using JitPack repository.
 
-```
+```groovy
     allprojects {
         repositories {
             ...
@@ -21,9 +21,9 @@ First of all: Add the following code in build.gradle of root project, means that
 
 Secondly: Add dependency in build.gradle of your module, means that compiling log liblary.
 
-```
+```groovy
     dependencies {
-        implementation 'com.github.isuperqiang:AndEasyLog:1.9.0'
+        implementation 'com.github.isuperqiang:AndEasyLog:2.0.0'
     }
 ```
 
@@ -34,7 +34,8 @@ Secondly: Add dependency in build.gradle of your module, means that compiling lo
 4. Support customize log tag, we use class name generally.
 5. Support infinite log length, no 4K char limit.
 6. Support output to file, just config output dir.
-7. Import the live-template-settings.jar in project extra dir into your AS, then you could init logger in fast way.
+7. Support specify log level to filter message easily.
+8. Import the live-template-settings.jar in project extra dir into your AS, then you could init logger in fast way.
 
 ### Usage:
 1. **Switch**
@@ -44,10 +45,12 @@ Secondly: Add dependency in build.gradle of your module, means that compiling lo
 ```java
     /*Turn logcat output on, defalut on*/
     /*Turn File output off, defalut off*/
+    /*Turn on VERBOSE level*/
         LoggerFactory.init(new LoggerConfig.Builder()
                 .context(this)
                 .logcatEnabled(true)
                 .logFileEnabled(true)
+                .logLevel(LoggerConfig.VERBOSE)
                 .build());
 ```
 2. **Initialize**

@@ -2,7 +2,8 @@ package com.easy.log.test;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.richie.easylog.ILogger;
 import com.richie.easylog.LoggerFactory;
@@ -22,14 +23,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void printTestLog() {
-        logger.info("********************************");
+        logger.verbose("********************************");
         logger.debug("打印一段消息");
-        logger.info("********************************");
+        logger.verbose("********************************");
         int[] intArray = {1, 2, 3};
         logger.debug("打印数组：{}", intArray);
         logger.info("********************************");
         logger.debug("打印多个参数。String:{}, int:{}, float:{}, long:{}, boolean:{}, char:{} etc.", "Log", 1, 10.24F, 1024L, false, 'c');
-        logger.info("********************************");
+        logger.verbose("********************************");
         Bundle bundle = new Bundle();
         bundle.putString("a", "12");
         bundle.putInt("b", 3);
